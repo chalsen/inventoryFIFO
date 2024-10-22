@@ -24,9 +24,9 @@ body{
     color: #fff;
     overflow: hidden;
     transition: all 0.5s linear;
-    background: rgba(113, 99, 186, 225);
+    background: rgb(23, 197, 23);
 }
-
+    
 .logo{
     width: 100%;
     height: 200px;
@@ -95,7 +95,6 @@ body{
 
 /* droopdown */
 .menu li {
-    padding: 1rem;
     margin: 8px 0;
     border-radius: 8px;
     transition: all 0.5s ease-in-out;
@@ -177,12 +176,13 @@ body{
 
 .header--wrapper h2{
     font-weight: 700;
-    font-size: 24px;
+    font-size: 20px;
     margin: 0;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .header--title{
-    color: rgba(113, 99, 186, 225);
+    color: rgb(23, 197, 23);
 }
 .header--title h2 {
     font-weight: 700;
@@ -200,7 +200,7 @@ body{
 .logout--box{
     background: rgb(237, 237, 237);
     border-radius: 15px;
-    color: rgba(113, 99, 186, 225);
+    color: rgb(23, 197, 23);
     display: flex;
     align-items: center;
     gap: 5px;
@@ -209,7 +209,7 @@ body{
 
 .logout--box a{
     text-decoration: none;
-    color: rgba(113, 99, 186, 225);
+    color: rgb(23, 197, 23);
     font-weight: 600;
     margin-right: 5px;
 }
@@ -233,7 +233,7 @@ body{
 
 
 .main--title{
-    color: rgba(113, 99, 186, 225);
+    color: rgb(23, 197, 23);
     padding-bottom: 10px;
     font-size: 17px;
 }
@@ -342,7 +342,7 @@ body{
     padding: 10px;
     font-size: 17px;
     font-weight: 700;
-    color: rgba(113, 99, 186, 225); 
+    color: rgb(23, 197, 23); 
 }
 
 .table-container {
@@ -364,7 +364,7 @@ th, td {
 }
 
 th {
-    background-color: rgba(113, 99, 186, 225 );
+    background-color: rgb(23, 197, 23);
 }
 
 .right{
@@ -405,7 +405,7 @@ th {
 }
 
 .button{
-    background-color: rgba(113, 99, 186, 225);
+    background-color: rgb(23, 197, 23);
     color: #fff;
 }
 .button-danger{
@@ -426,7 +426,7 @@ th {
 }
 
 tbody tr td a i{
-    color: rgba(113, 99, 186, 225);
+    color: rgb(23, 197, 23);
     font-size: 20px;
 }
 tbody tr td a {
@@ -441,7 +441,7 @@ tbody tr td a {
  }
 
  .paginate_button.active .page-link {
-    background-color: rgba(113, 99, 186, 225) !important;
+    background-color: rgb(23, 197, 23) !important;
     border: none  !important;
   }
 
@@ -523,12 +523,12 @@ tbody tr td a {
 .page-item.active .page-link {
     z-index: 3;
     color: #fff;
-    background-color:  rgba(113, 99, 186, 225);
-    border-color:  rgba(113, 99, 186, 225);
+    background-color:  rgb(23, 197, 23);
+    border-color:  rgb(23, 197, 23);
 }
 
 .header--name{
-    color: rgba(113, 99, 186, 225);
+    color: rgb(23, 197, 23);
     padding: 10px;
     display: flex;
     align-items: center;

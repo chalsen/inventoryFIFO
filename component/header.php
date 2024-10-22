@@ -1,13 +1,13 @@
 <?php
-if (empty( $_SESSION['username'])  AND empty($_SESSION['pass'] )){
-    header("location:login.php");  
-} 
+if (empty($_SESSION['username'])  and empty($_SESSION['pass'])) {
+    header("location:login.php");
+}
 
 ?>
 <div class="header--wrapper">
-    <h2>LEKUMU.</h2>
+    <h2>ROTI UNCU</h2>
     <div class="header--title">
-        <h2><?php echo"$title"; ?></h2>
+        <h2><?php echo "$title"; ?></h2>
     </div>
     <div class="user--info">
         <div class="logout--box">
