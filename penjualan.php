@@ -4,14 +4,15 @@ include 'function.php';
 session_start();
 // $dataPenjualan = getPenjualan($connect);
 $data_produk = getAllProduct($connect);
-$title = "Transaksi";
-// $query = "SELECT SUM(ph.penjualan*harga) as total
+$data_penjualan = getPenjualan($connect);
+$title = "Transaksi"; // $query = "SELECT SUM(ph.penjualan*harga) as total
 // FROM `tb_penjualan_harian` ph 
 // JOIN tb_produk pr ON pr.id_produk = ph.id_produk ";
 // $sql = mysqli_query($connect, $query);
 // $result = mysqli_fetch_assoc($sql);
 
 // $total = $result['total'];
+
 ?>
 
 <!DOCTYPE html>
@@ -38,37 +39,56 @@ $title = "Transaksi";
         <?php include 'component/header.php'; ?>
 
         <div class="card--container">
-            <div class="row">
-                <div class="card mb-4 rounded-3 shadow-sm border-success">
-                    <div class="card-header py-3">
-                        <h5 class="my-0 fw-normal">Barang</h5>
+            <form action="Logic/input_logic.php" method="post">
+                <div class="row">
+                    <div class="col">
+                        <div class="card mb-4 rounded-3 shadow-sm border-success">
+                            <div class="card-header py-3">
+                                <h5 class="my-0 fw-normal">Produk</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Cari Produk</p>
+                                <div class="search_select_box">
+                                    <select name="produk" class="w-100 mb-3" data-live-search="true">
+                                        <option value="null" disabled selected>Pilih Barang...</option>
+                                        <?php foreach ($data_produk as $tampil) : ?>
+                                            <option value="<?php echo $tampil['id_produk']; ?>"><?php echo $tampil['nama_produk']; ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <p class="m-0">Harga</p>
+                                        <input type="text" class="input-group-text" value="Rp 0" readonly>
+                                    </div>
+                                    <div class="col">
+                                        <p class="m-0">Jumlah</p>
+                                        <input type="number" name="jumlah" min="0" class="input-group-text" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p>Cari barang</p>
-                        <div class="search_select_box">
-                            <select name="transaksi" class="w-100 mb-3" data-live-search="true">
-                                <option value="" disabled selected>Pilih Barang...</option>
-                                <?php foreach ($data_produk as $tampil) : ?>
-                                    <option value="<?php echo $tampil['id_produk']; ?>"><?php echo $tampil['nama_produk']; ?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <p class="m-0">Harga</p>
-                                <input type="text" class="input-group-text" value="Rp 0" readonly>
+                    <div class="col">
+                        <div class="card mb-4 rounded-3 shadow-sm border-success">
+                            <div class="card-header py-3">
+                                <h5 class="my-0 fw-normal">Toko Tujuan</h5>
                             </div>
-                            <div class="col">
-                                <p class="m-0">Jumlah</p>
-                                <input type="number" min="0" class="input-group-text">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <p class="m-0">Toko</p>
+                                    <input type="text" name="toko" class="input-group-text w-100" placeholder="Masukan nama toko" required>
+
+                                    <p class="m-0">Alamat</p>
+                                    <input type="text" name="alamat" class="input-group-text w-100" placeholder="Masukan alamat toko" required>
+                                </div>
+
+                                <button type="submit" name="submit" value="simpan_penjualan" class="w-100  btn btn-md btn-success">Masukan ke keranjang <i class="fa fa-shopping-cart"></i></button>
                             </div>
-
                         </div>
-
-                        <button type="button" class="w-100  btn btn-md btn-success">Masukan ke keranjang <i class="fa fa-shopping-cart"></i></button>
                     </div>
                 </div>
-            </div>
+            </form>
             <div class="row">
                 <div class="card mb-4 rounded-3 ">
                     <div class="card-header py-3 text-bg-primary d-flex justify-content-between">
@@ -80,7 +100,48 @@ $title = "Transaksi";
                             <p class="mb-0 me-2">tanggal</p>
                             <input class="form-control w-auto" type="text" value="<?php echo date("Y-m-d");  ?>" readonly>
                         </div>
-                        <button type="button" class="w-100 btn btn-lg btn-primary">Contact us</button>
+                        <div>
+                            <table id="tableformat" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Produk</th>
+                                        <th scope="col">Harga</th>
+                                        <th scope="col">Jumlah</th>
+                                        <th scope="col">Toko</th>
+                                        <th scope="col">Alamat</th>
+                                        <th scope="col">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- looping di sini -->
+                                    <?php foreach ($data_penjualan as $jual): ?>
+                                        <tr>
+                                            <td><?= $jual['produk']; ?></td>
+                                            <td><?= $jual['harga']; ?></td>
+                                            <td><?= $jual['jumlah']; ?></td>
+                                            <td><?= $jual['toko']; ?></td>
+                                            <td><?= $jual['alamat']; ?></td>
+                                            <td>
+                                                <div class="grupAction">
+                                                    <button class="btn btn-success" id="edit_penjualan"><i class="fa fa-edit"></i></button>
+                                                    <button class="btn btn-danger "><i class="fa fa-trash"></i></button>
+                                                </div>
+                                                <div class="invisible grupEdit">
+                                                    <button class="btn btn-success btn_edit"><i class="fa fa-check"></i></button>
+                                                    <button class="btn btn-danger btn_edit" id="cencelEdit"><i class="fa fa-times"></i></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mb-3">
+                            <p class="d-inline">Total Harga:</p>
+                            <input class="d-inline form-control" style="width: fit-content;" value="Rp. 2.000" />
+                        </div>
+                        <button type="button" class="btn btn-md btn-success">Bayar <i class="fa fa-dollar-sign"></i></button>
+                        <button type="button" class="btn btn-md btn-secondary">Cetak <i class="fa fa-print"></i></button>
                     </div>
                 </div>
             </div>
@@ -98,6 +159,7 @@ $title = "Transaksi";
             $('.search_select_box select').selectpicker();
         })
     </script>
+    <script src="script.js"></script>
 </body>
 
 

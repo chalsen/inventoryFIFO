@@ -7,9 +7,13 @@ const liproduk = document.getElementById('li_produk');
 const SubMenu_produk = document.getElementById('SubMenu_produk');
 const SubMenu_StockIn = document.getElementById('SubMenu_stock_in');
 const SubMenu_kategori = document.getElementById('SubMenu_kategori');
-const penjualan = document.getElementById('li_penjualan');
+const penjualan = document.querySelector('#li_penjualan');
 const record = document.getElementById('li_record');
 const popbox = document.getElementById('popbox');
+const btn_edit = document.querySelector('#edit_penjualan');
+const grup_edit = document.querySelector('.grupEdit');
+const grup_action = document.querySelector('.grupAction');
+const cencelEdit = document.querySelector('#cencelEdit');
 
 
 function updateNavClass(activeTabId) {
@@ -124,3 +128,14 @@ function validateInput() {
 if (currentHref.includes('karyawan.php?error')) {
     alert("akun sedang dipakai");
 } 
+
+// toggle edit data pada action keranjang
+btn_edit.addEventListener('click',()=>{
+    grup_action.classList.toggle('invisible'); 
+    grup_edit.classList.toggle('invisible');
+})
+cencelEdit.addEventListener('click',()=>{
+    grup_action.classList.toggle('invisible'); 
+    grup_edit.classList.toggle('invisible');
+})
+

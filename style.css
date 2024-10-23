@@ -8,6 +8,11 @@
     box-sizing: border-box;
     font-family: "poppins", sans-serif;
 }
+.select2-search__field{
+    color: red;
+}
+
+
 
 body{
     display: flex;
@@ -26,7 +31,8 @@ body{
     transition: all 0.5s linear;
     background: rgb(23, 197, 23);
 }
-    
+
+
 .logo{
     width: 100%;
     height: 200px;
@@ -540,3 +546,6 @@ tbody tr td a {
     margin: 0;
 }
 
+.invisible{
+    display: none;
+}
