@@ -82,6 +82,18 @@ function getAllProduct($connect)
 
     return $result;
 }
+function getAllBaku($connect)
+{
+    $query = "SELECT * FROM `tb_baku`";
+    $sql = mysqli_query($connect, $query);
+    $result = array();
+
+    while ($row = mysqli_fetch_assoc($sql)) {
+        $result[] = $row;
+    }
+
+    return $result;
+}
 
 function getAllKategori($connect)
 {
