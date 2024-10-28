@@ -1,10 +1,10 @@
 <?php
 include '../component/connection.php';
 
-function delete($connect, $table, $id_name, $id, $location)
+function delete($connect, $table, $field, $id, $location)
 {
     $id_tmp = mysqli_real_escape_string($connect, $id);
-    $query = "DELETE FROM $table WHERE $id_name = ?";
+    $query = "DELETE FROM $table WHERE $field = ?";
     $stmt = mysqli_prepare($connect, $query);
     if ($stmt) {
         mysqli_stmt_bind_param($stmt, 'i', $id_tmp);
@@ -87,6 +87,7 @@ if (isset($_GET['delete_karyawan'])) {
     $column = "id_kategori";
     delete($connect, $table, $column, $id, $location);
 } else if (isset($_GET['delete_penjualan'])) {
+
     $id = $_GET['delete_penjualan'];
     $location = "../penjualan.php?deleteSuccess";
     $table = "`tb_penjualan_harian`";
@@ -114,6 +115,10 @@ if (isset($_GET['delete_karyawan'])) {
     $query_delete = "DELETE FROM `tb_restok` WHERE 1";
     $sql_delete = mysqli_query($connect, $query_delete);
     header("location: ../stock_in.php");
+} else if (isset($_POST['Reset_keranjang'])) {
+    $query_delete = "DELETE FROM `tb_penjualan_harian` WHERE 1";
+    $sql_delete = mysqli_query($connect, $query_delete);
+    header("location: ../penjualan.php");
 } else {
     header("location: ../index.php?deleteError");
 }
