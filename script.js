@@ -167,7 +167,7 @@ function cheking_penjualan() {
     let stokProduk = document.querySelector("#stokProduk").value ;
     let nilaiJumlahProduk = parseInt(jumlahProduk.value);
     let nilaiSelect = document.querySelector("#selection_product").value;
-    let border_select = document.querySelector("#tambahPenjualan > div > div:nth-child(1) > div > div.card-body > div.search_select_box > div")
+    let border_select = document.querySelector("#tambahPenjualan > div.search_select_box > div");
     button.disabled = true; 
     button.innerText = "Processing...";
     
@@ -233,8 +233,8 @@ function cekDataPenjualan(){
 
 }
 
-function showFormPembayaran(){
-    let form_pembayaran = document.querySelector('#form-pembayaran');
+function showFormPembeli(){
+    let form_pembayaran = document.querySelector('#form-pembeli');
     form_pembayaran.classList.toggle('invisible');
 }
 
@@ -242,4 +242,46 @@ function oneclick(){
     this.disabled = true;
     this.style.pointerEvents='none'; 
     this.innerHTML = 'Processing...';
+}
+
+function cekPembayaran(){
+    let totalHarga = document.querySelector("#totalHarga"); 
+    let totalBayar = document.querySelector("#totalBayar"); 
+    let textInfoKurang = document.querySelector("#infoKurang"); 
+    let costumer = document.querySelector("#costumer"); 
+    let toko = document.querySelector("#toko"); 
+    let alamat = document.querySelector("#alamat"); 
+    let inputCost = document.querySelector("#inputCost");
+    let inputToko  = document.querySelector("#inputToko");
+    let inputAlamat = document.querySelector("#inputAlamat");
+
+    
+    
+    inputCost.value = costumer.value;
+    inputToko.value = toko.value;
+    inputAlamat.value = alamat.value;
+
+    let valueBayar = parseInt(totalBayar.value);
+    let valueHarga = parseInt(totalHarga.value.replace(/[^0-9]/g, ""));
+
+    if(valueBayar >= valueHarga){
+        location.reload();
+        document.getElementById("bayar").submit();
+        totalHarga.style.border = "1px solid #ced4da";
+        totalBayar.style.border = "1px solid #ced4da";
+    }else{
+        totalHarga.style.border = "1px solid red";
+        totalBayar.style.border = "1px solid red";
+        textInfoKurang.classList.remove('invisible');
+    }
+    
+}
+
+function formBayar(action){
+    let form = document.querySelector("#form_bayar");
+    if(action == "close"){
+        form.classList.add("invisible");
+    }else{
+        form.classList.toggle("invisible");
+    }
 }

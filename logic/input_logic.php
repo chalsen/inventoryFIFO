@@ -126,8 +126,7 @@ if (isset($_POST['submit'])) {
         }
 
         mysqli_close($connect);
-    } else if ($_POST['submit'] == 'simpan_stock_in') // simpan data stock
-    {
+    } else if ($_POST['submit'] == 'simpan_stock_in') {
         $baku = mysqli_real_escape_string($connect, $_POST['baku']);
         $supplier = mysqli_real_escape_string($connect, $_POST['supplier']);
         $harga = mysqli_real_escape_string($connect, $_POST['harga']);
@@ -186,8 +185,7 @@ if (isset($_POST['submit'])) {
         }
 
         mysqli_close($connect);
-    } else if ($_POST['submit'] == 'simpan_penjualan') //simpan data penjualan
-    {
+    } else if ($_POST['submit'] == 'simpan_penjualan') {
         $produk = mysqli_real_escape_string($connect, $_POST['produk']);
         $jumlah = mysqli_real_escape_string($connect, $_POST['jumlah']);
         $toko = mysqli_real_escape_string($connect, $_POST['toko']);
@@ -232,8 +230,7 @@ if (isset($_POST['submit'])) {
         }
 
         mysqli_close($connect);
-    } else if ($_POST['submit'] == 'simpan_record') //simpan data penjualan
-    {
+    } else if ($_POST['submit'] == 'simpan_record') {
         $produk = mysqli_real_escape_string($connect, $_POST['produk']);
         $harga = mysqli_real_escape_string($connect, $_POST['harga']);
         $terjual = mysqli_real_escape_string($connect, $_POST['terjual']);
@@ -269,19 +266,6 @@ if (isset($_POST['submit'])) {
 
     $produk = mysqli_real_escape_string($connect, $_POST['produk']);
     $jumlah = mysqli_real_escape_string($connect, $_POST['jumlah']);
-
-    // //mengambil data produk
-    // $query_produk = "SELECT  `jumlah` FROM `tb_produk` WHERE id_produk = $produk";
-    // $sql = mysqli_query($connect, $query_produk);
-    // $data = mysqli_fetch_assoc($sql);
-
-    // //cek apakah stock produk cukup
-    // if ($jumlah > $data['jumlah']) {
-    //     session_start();
-    //     $_SESSION['error_message'] = 'stock tidak cukup';
-    //     header("location: ../input_component/input_penjualan.php");
-    //     die();
-    // }
 
     $query = "INSERT INTO `tb_penjualan_harian`(`id_produk`,`penjualan`) VALUES (?,?)";
 

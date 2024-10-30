@@ -41,11 +41,10 @@
                 </a>
             </li>
             <li id="li_record">
-                <a href="<?= $_SESSION['level'] === 'admin' ? 'recordAdmin.php' : 'record.php'; ?>">
-                    <i class="fas fa-box"></i>
+                <a href="#">
+                    <i class="fas fa-file-alt"></i>
                     <span>Laporan</span>
                     <i class="fas fa-caret-down"></i>
-
                 </a>
 
                 <ul class="p-0">

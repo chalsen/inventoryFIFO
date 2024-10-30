@@ -118,29 +118,29 @@ if ($data_penjualan != null) {
                             <div class="row row-cols-auto mb-3 p-0">
                                 <div class=" col grupInfoPembeli">
                                     <p class="mb-0">Pembeli:</p>
-                                    <input class="d-inline input-group-text bg-light " style="width: fit-content;" value="<?= $customer; ?> " readonly />
+                                    <input class="d-inline input-group-text bg-light " style="width: fit-content;" value="<?= $customer; ?> " id="costumer" readonly />
                                 </div>
                                 <div class=" col grupInfoPembeli">
                                     <p class="mb-0">Toko:</p>
-                                    <input class="d-inline input-group-text bg-light " style="width: fit-content;" value="<?= $toko; ?> " readonly />
+                                    <input class="d-inline input-group-text bg-light " style="width: fit-content;" value="<?= $toko; ?> " id="toko" readonly />
                                 </div>
                                 <div class=" col grupInfoPembeli">
                                     <p class="mb-0">Alamat:</p>
-                                    <input class="d-inline input-group-text bg-light " style="width: fit-content;" value="<?= $alamat; ?>" readonly />
+                                    <input class="d-inline input-group-text bg-light " style="width: fit-content;" value="<?= $alamat; ?>" id="alamat" readonly />
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col">
-                                    <button type="button" id="btnPembeli" onclick="showFormPembayaran()" class="btnModalPembeli btn btn-md btn-warning">Input Pembeli <i class="fa fa-dollar-sign"></i></button>
+                                    <button type="button" id="btnPembeli" onclick="showFormPembeli()" class="btnModalPembeli btn btn-md btn-warning">Input Pembeli <i class="fa fa-dollar-sign"></i></button>
                                 </div>
                             </div>
                             <div class="row row-cols-auto">
                                 <div class="col">
-                                    <button type="button" class="btn btn-md btn-success" id="btnBayar">Bayar <i class="fa fa-dollar-sign"></i></button>
+                                    <button type="button" class="btn btn-md btn-success" onclick="formBayar('show')" id="btnBayar">Bayar <i class="fa fa-dollar-sign"></i></button>
                                 </div>
                                 <div class="col">
-                                    <form action="pdf/print.php" method="post">
-                                        <button type="submit" value="print_penjualan" name="print_penjualan" class="btn btn-md btn-secondary" id="btnTagihan">Cetak Tagihan <i class="fa fa-print"></i></button>
+                                    <form action="pdf/print.php" method="post" target="_blank">
+                                        <button type="submit" value="print_tagihan" name="print_tagihan" class="btn btn-md btn-secondary" id="btnTagihan">Cetak Tagihan <i class="fa fa-print"></i></button>
                                     </form>
                                 </div>
 
@@ -204,54 +204,8 @@ if ($data_penjualan != null) {
             </div>
         </div>
     </div>
-    </div>
     <!-- pop -->
-    <div class="pop-up-container" id="popbox">
-        <button class="x_btn" onclick="close_pop()" type="button">
-            <span class="x"></span>
-            <span class="x"></span>
-        </button>
-        <div class="pop-content">
-            <h4>peringatan!!</h4>
-            <p id="text_warning">apakah anda mau mengahpus semua data?</p>
-            <a class=" button mb-3 btn " onclick="oneclick.call(this)">lanjutkan</a>
-        </div>
-    </div>
-    <!-- transaksi  -->
-    <div class="form_pembayaran mb-4 rounded-3 shadow-sm border-success invisible " id="form-pembayaran">
-        <div class="card-header py-3">
-            <h5 class="my-0 fw-normal">Input Data Pembeli</h5>
-            <input type="button" id="checkDataPenjualan" value="<?= isset($data_penjualan[0]) ? 'Data Penjualan Ada' : null; ?>" hidden>
-            <input type="button" id="checkDataCostumer" value="<?= isset($data_penjualan[0]['costumer']) ? 'Data Penjualan Ada' : null; ?>" hidden>
-        </div>
-        <div class="card-body d-flex flex-column justify-content-between">
-            <div class="row mb-3 d-flex justify-content-center input-group input-group-lg ">
-                <form action="logic/input_logic.php" method="post">
-                    <div class="mb-3">
-                        <div class="mb-3">
-                            <p class="mb-0">Customer</p>
-                            <input class="form-control w-100 " name="costumer" type="text" placeholder="masukan nama costumer" value="<?= $customer; ?>" required />
-
-                        </div>
-                        <div class="mb-3">
-                            <p class="mb-0">Toko</p>
-                            <input class="form-control w-100 " name="toko" type="text" placeholder="masukan nama Toko" value="<?= $toko; ?>" required />
-                        </div>
-                        <div class="mb-3">
-                            <p class="mb-0">Alamat</p>
-                            <input class=" form-control w-100 " name="alamat" style="width: fit-content;" type="text" placeholder="masukan alamat toko" value="<?= $alamat; ?>" required />
-                        </div>
-                    </div>
-                    <div>
-                        <button type="submit" name="simpan_pembeli" value="pembeli" class="btnInputPembeli btn btn-lg btn-success">Simpan</button>
-                    </div>
-                </form>
-            </div>
-            <div class="text-end">
-                <button type="button" onclick=" showFormPembayaran()" class="btn btn-lg btn-danger">Batal</button>
-            </div>
-        </div>
-    </div>
+    <?php include 'component/pop_up.php'; ?>
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

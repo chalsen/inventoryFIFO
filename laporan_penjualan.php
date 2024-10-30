@@ -34,11 +34,13 @@ $title = "Rekap data penjualan";
             <table id="tableformat" class="table table-striped table-bordered table-hover w-full ">
                 <thead>
                     <tr>
-                        <th scope="col">produk</th>
-                        <th scope="col">harga</th>
-                        <th scope="col">terjual</th>
-                        <th scope="col">Perekap</th>
-                        <th scope="col">tanggal terjual</th>
+                        <th scope="col">Produk</th>
+                        <th scope="col">Harga</th>
+                        <th scope="col">Terjual</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Tanggal</th>
+                        <th scope="col">Pembeli</th>
+                        <th scope="col">Toko</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,8 +52,10 @@ $title = "Rekap data penjualan";
                             <td><?= $tampil['produk']; ?></td>
                             <td><?= $tampil['harga']; ?></td>
                             <td><?= $tampil['terjual']; ?></td>
-                            <td><?= $tampil['nama_perekap']; ?></td>
+                            <td><?= $tampil['harga'] * $tampil['terjual']; ?></td>
                             <td><?= $tampil['tanggal']; ?></td>
+                            <td><?= $tampil['costumer']; ?></td>
+                            <td><?= $tampil['toko']; ?></td>
 
 
                         </tr>

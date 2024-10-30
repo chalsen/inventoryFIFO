@@ -30,10 +30,8 @@ $title = "Karyawan";
 
         <div class="card--container">
             <!-- table start -->
-            <?php if ($_SESSION['level'] === 'admin') : ?>
-                <a href="input_component/input_karyawan.php" class=" button mb-3 btn "><i class="fas fa-plus-square me-2"></i>Tambah Data</a>
-            <?php endif; ?>
-            <table id="tableformat" class="table table-striped table-bordered table-hover ">
+            <a href="input_component/input_karyawan.php" class=" button mb-3 btn "><i class="fas fa-plus-square me-2"></i>Tambah Data</a>
+            <table id="tableformat" class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
                         <th scope="col">Nama</th>
@@ -41,9 +39,7 @@ $title = "Karyawan";
                         <th scope="col">No Telp</th>
                         <th scope="col">Jenis Kelamin</th>
                         <th scope="col">tanggal lahir</th>
-                        <?php if ($_SESSION['level'] === 'admin') : ?>
-                            <th scope="col">Aksi</th>
-                        <?php endif; ?>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,13 +53,13 @@ $title = "Karyawan";
                             <td><?= $tampil['np']; ?></td>
                             <td><?= $tampil['jenis_kelamin']; ?></td>
                             <td><?= $tampil['tanggal_lahir']; ?></td>
-                            <?php if ($_SESSION['level'] === 'admin') : ?>
-                                <td>
-                                    <a onclick="showConfirmationEdit(<?= $tampil['id_karyawan'] ?>)" type="button"><i class="fa fa-pen"></i></a>
-                                    <!-- delete -->
-                                    <a onclick="showConfirmationDelete(<?= $tampil['id_karyawan'] ?>)"><i class="fa fa-trash"></i></a>
-                                </td>
-                            <?php endif; ?>
+
+                            <td>
+                                <a onclick="showConfirmationEdit(<?= $tampil['id_karyawan'] ?>)" type="button"><i class="fa fa-pen"></i></a>
+                                <!-- delete -->
+                                <a onclick="showConfirmationDelete(<?= $tampil['id_karyawan'] ?>)"><i class="fa fa-trash"></i></a>
+                            </td>
+
                         </tr>
                     <?php endforeach; ?>
                     <!-- loop end -->

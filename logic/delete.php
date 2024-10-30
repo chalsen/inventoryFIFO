@@ -112,13 +112,36 @@ if (isset($_GET['delete_karyawan'])) {
     $column = "id_rekap";
     delete($connect, $table, $column, $id, $location);
 } else if (isset($_POST['delete_all'])) {
-    $query_delete = "DELETE FROM `tb_restok` WHERE 1";
-    $sql_delete = mysqli_query($connect, $query_delete);
+    deleteALL("tb_restok", $connect);
     header("location: ../stock_in.php");
+    exit();
 } else if (isset($_POST['Reset_keranjang'])) {
-    $query_delete = "DELETE FROM `tb_penjualan_harian` WHERE 1";
-    $sql_delete = mysqli_query($connect, $query_delete);
+
+    // Ambil data dari tb_penjualan_harian
+    $query_select = "SELECT id_produk, penjualan FROM tb_penjualan_harian";
+    $sql_select = mysqli_query($connect, $query_select);
+
+    // Update stok di tb_produk
+    while ($row = mysqli_fetch_assoc($sql_select)) {
+        $id_produk = $row['id_produk'];
+        $penjualan = $row['penjualan'];
+
+        // Update stok
+        $query_update = "UPDATE tb_produk SET jumlah = jumlah + $penjualan WHERE id_produk = $id_produk";
+        mysqli_query($connect, $query_update);
+    }
+
+    // Hapus semua record dari tb_penjualan_harian
+    deleteALL("tb_penjualan_harian", $connect);
+
     header("location: ../penjualan.php");
+    exit();
 } else {
     header("location: ../index.php?deleteError");
+}
+
+function deleteALL($table, $connect)
+{
+    $query_delete = "DELETE FROM $table WHERE 1";
+    mysqli_query($connect, $query_delete);
 }
