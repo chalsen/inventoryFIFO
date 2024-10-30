@@ -126,8 +126,7 @@ if (isset($_POST['submit'])) {
         }
 
         mysqli_close($connect);
-    } else if ($_POST['submit'] == 'simpan_stock_in') // simpan data stock
-    {
+    } else if ($_POST['submit'] == 'simpan_stock_in') {
         $baku = mysqli_real_escape_string($connect, $_POST['baku']);
         $supplier = mysqli_real_escape_string($connect, $_POST['supplier']);
         $harga = mysqli_real_escape_string($connect, $_POST['harga']);
@@ -186,8 +185,7 @@ if (isset($_POST['submit'])) {
         }
 
         mysqli_close($connect);
-    } else if ($_POST['submit'] == 'simpan_penjualan') //simpan data penjualan
-    {
+    } else if ($_POST['submit'] == 'simpan_penjualan') {
         $produk = mysqli_real_escape_string($connect, $_POST['produk']);
         $jumlah = mysqli_real_escape_string($connect, $_POST['jumlah']);
         $toko = mysqli_real_escape_string($connect, $_POST['toko']);
@@ -232,8 +230,7 @@ if (isset($_POST['submit'])) {
         }
 
         mysqli_close($connect);
-    } else if ($_POST['submit'] == 'simpan_record') //simpan data penjualan
-    {
+    } else if ($_POST['submit'] == 'simpan_record') {
         $produk = mysqli_real_escape_string($connect, $_POST['produk']);
         $harga = mysqli_real_escape_string($connect, $_POST['harga']);
         $terjual = mysqli_real_escape_string($connect, $_POST['terjual']);
@@ -265,6 +262,55 @@ if (isset($_POST['submit'])) {
     } else {
         header("location:../index.php?error");
     }
+} else if (isset($_POST['simpan']) == "penjualan") {
+
+    $produk = mysqli_real_escape_string($connect, $_POST['produk']);
+    $jumlah = mysqli_real_escape_string($connect, $_POST['jumlah']);
+
+    $query = "INSERT INTO `tb_penjualan_harian`(`id_produk`,`penjualan`) VALUES (?,?)";
+
+    $stmt = mysqli_prepare($connect, $query);
+
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 'ii', $produk, $jumlah);
+        $result = mysqli_stmt_execute($stmt);
+
+        if ($result) {
+            //melakukan simpan jumlah ke table produk
+            $query = "UPDATE `tb_produk` SET `jumlah` = `jumlah` - $jumlah  WHERE id_produk = $produk";
+            $sql = mysqli_query($connect, $query);
+            if ($sql) {
+                header("location:../penjualan.php?success");
+                exit();
+            }
+        } else {
+            header("location:../penjualan.php?error");
+        }
+
+        mysqli_stmt_close($stmt);
+    } else {
+        header("location:../penjualan.php?error");
+    }
+
+    mysqli_close($connect);
+} else if (isset($_POST['simpan_pembeli']) == "pembeli") {
+
+    $costumer = $_POST['costumer'];
+    $toko = $_POST['toko'];
+    $alamat =  $_POST['alamat'];
+
+    $query = "UPDATE `tb_penjualan_harian` 
+    SET `costumer` = '$costumer', `toko` = '$toko', `alamat` = '$alamat'";
+
+    $sql = mysqli_query($connect, $query);
+
+    if ($sql) {
+        header("location:../penjualan.php?success");
+        exit();
+    } else {
+        echo "Gagal mengeksekusi pernyataan SQL: " . mysqli_error($connect);
+    }
+    mysqli_close($connect);
 } else {
     header("location:../index.php?error");
 }

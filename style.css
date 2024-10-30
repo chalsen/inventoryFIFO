@@ -26,7 +26,7 @@ body{
     width: 110px;
     min-height: 100vh;
     padding: 0 1.7rem;
-    color: #fff;
+    color: #9b9b9b;
     overflow: hidden;
     transition: all 0.5s linear;
     background: rgb(23, 197, 23);
@@ -455,14 +455,15 @@ tbody tr td a {
 
   /* pop up */
   .pop-up-container {
-    width: 50vh;
-    height: 50vh;
-    z-index: 20;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 5%;
-    border: 5px solid #d2cfcf ;
-    position: absolute;
+      width: 50vh;
+      height: 50vh;
+      z-index: 20;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 5%;
+      border: 5px solid #d2cfcf ;
+      
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -548,4 +549,22 @@ tbody tr td a {
 
 .invisible{
     display: none;
+}
+
+div.form_pembayaran{
+    width: 80vh;
+    height: 80vh;
+    z-index: 20;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 5%;
+    border: 3px solid ;
+    
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
 }
