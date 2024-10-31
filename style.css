@@ -568,3 +568,13 @@ div.form_pembayaran{
   display: flex;
   flex-direction: column;
 }
+
+#tableformat_wrapper > div.dt-buttons{
+    width: 100%;
+    margin-bottom: 10px;
+}
+.top{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}

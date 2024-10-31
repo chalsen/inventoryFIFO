@@ -85,15 +85,57 @@ $title = "Rekap data penjualan";
     <script>
         $(document).ready(function() {
             $('#tableformat').DataTable({
-                dom: 'Bfrtip',
+
+                dom: "B<'top'lf>rtip",
                 buttons: [{
                         extend: 'pdf',
                         orientation: 'portrait', // Menggunakan 'portrait' bukan 'potrait'
                         pageSize: 'legal',
                         download: 'open',
-                        title: 'data penjualan',
+                        title: ' ',
                         customize: function(doc) {
-                            doc.content[1].margin = [100, 0, 100, 0] //left, top, right, bottom
+                            doc.content[1].margin = [40, 10, 40, 20]
+
+                            doc['footer'] = function(currentPage, pageCount) {
+                                return {
+                                    columns: [{
+                                            text: 'Laporan Penjualan',
+                                            alignment: 'center',
+                                            margin: [40, 0, 0, 0]
+                                        },
+                                        {
+                                            text: 'Halaman ' + currentPage + ' dari ' + pageCount,
+                                            alignment: 'right',
+                                            margin: [0, 0, 40, 0]
+                                        }
+                                    ],
+                                    margin: [0, 10, 0, 0]
+                                };
+                            };
+                            doc.content.unshift({
+                                text: 'Laporan Penjualan',
+                                style: 'header'
+                            });
+
+                            doc.styles = {
+                                td: {
+                                    padding: '10px',
+                                },
+                                header: {
+                                    fontSize: 18,
+                                    bold: true,
+                                    alignment: 'center',
+                                    margin: [0, 0, 0, 10]
+                                },
+                                tableHeader: {
+                                    bold: true,
+                                    fontSize: 12,
+                                    color: 'white',
+                                    fillColor: '#4caf50', // Background header table berwarna hijau
+                                    alignment: 'center'
+                                }
+                            };
+
                         }
 
                     },

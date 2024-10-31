@@ -254,6 +254,7 @@ function cekPembayaran(){
     let inputCost = document.querySelector("#inputCost");
     let inputToko  = document.querySelector("#inputToko");
     let inputAlamat = document.querySelector("#inputAlamat");
+    let btnBayar = document.querySelector("#btnPembayaran");
 
     
     
@@ -269,6 +270,8 @@ function cekPembayaran(){
         document.getElementById("bayar").submit();
         totalHarga.style.border = "1px solid #ced4da";
         totalBayar.style.border = "1px solid #ced4da";
+        btnBayar.innerHTML = "Processing";
+        btnBayar.disabled= true;
     }else{
         totalHarga.style.border = "1px solid red";
         totalBayar.style.border = "1px solid red";
