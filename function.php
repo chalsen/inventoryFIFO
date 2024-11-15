@@ -70,9 +70,23 @@ function getAllSupplier($connect)
     return $result;
 }
 
+
 function getAllProduct($connect)
 {
-    $query = "SELECT `id_produk`, `nama_produk` FROM `tb_produk`";
+    $query = "SELECT * FROM `tb_produk`";
+    $sql = mysqli_query($connect, $query);
+    $result = array();
+
+    while ($row = mysqli_fetch_assoc($sql)) {
+        $result[] = $row;
+    }
+
+    return $result;
+}
+
+function getAllBaku($connect)
+{
+    $query = "SELECT * FROM `tb_baku`";
     $sql = mysqli_query($connect, $query);
     $result = array();
 
@@ -139,16 +153,25 @@ LEFT JOIN tb_supplier s ON r.id_supplier = s.id_supplier
 
 function getPenjualan($connect)
 {
-    $query = "SELECT  j.id_penjualan as id,
-    j.id_produk as id_produk,
+    $query = "SELECT 
+    j.id_penjualan AS id,
+    j.id_produk AS id_produk,
     p.nama_produk AS produk,
-    p.harga as harga,
-    j.penjualan as jumlah,
-    j.toko as toko,
-    j.alamat as alamat,
-    j.tanggal AS tanggal
-FROM tb_penjualan_harian j
-JOIN tb_produk p ON j.id_produk = p.id_produk
+    p.harga AS harga,
+    j.penjualan AS jumlah,
+    j.costumer AS costumer,
+    j.toko AS toko,
+    j.alamat AS alamat,
+    j.tanggal AS tanggal,
+    (SELECT SUM(j2.penjualan * p2.harga) 
+     FROM tb_penjualan_harian j2 
+     JOIN tb_produk p2 ON j2.id_produk = p2.id_produk) AS total,
+    (SELECT COUNT(DISTINCT j3.id_produk) 
+     FROM tb_penjualan_harian j3) AS jumlah_produk
+FROM 
+    tb_penjualan_harian j
+JOIN 
+    tb_produk p ON j.id_produk = p.id_produk
     ";
     $sql = mysqli_query($connect, $query);
     $result = array();

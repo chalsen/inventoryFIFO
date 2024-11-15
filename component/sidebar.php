@@ -27,7 +27,7 @@
                     <i class="fas fa-caret-down"></i>
                 </a>
                 <ul class="p-0">
-                    <li id="SubMenu_stock_in"><a href="stock_in.php"><span>stock Masuk</span></a></li>
+                    <li id="SubMenu_stock_in"><a href="stock_in.php"><span>Bahan Stok</span></a></li>
                     <li id="SubMenu_produk"><a href="produk.php"><span>list-produk</span></a></li>
                     <li id="SubMenu_kategori"><a href="kategori.php"><span>kategori</span></a></li>
                 </ul>
@@ -41,11 +41,18 @@
                 </a>
             </li>
             <li id="li_record">
-                <a href="<?= $_SESSION['level'] === 'admin' ? 'recordAdmin.php' : 'record.php'; ?>">
-                    <i class="fas fa-briefcase"></i>
-                    <span>record</span>
+                <a href="#">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Laporan</span>
+                    <i class="fas fa-caret-down"></i>
                 </a>
+
+                <ul class="p-0">
+                    <li id="SubMenu_stock_in"><a href="laporan_penjualan.php"><span>Penjualan</span></a></li>
+                    <li id="SubMenu_produk"><a href="produk.php"><span>Bahan Keluar Masuk</span></a></li>
+                </ul>
             </li>
+
         </ul>
     </div>
 </div>

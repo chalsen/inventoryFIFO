@@ -2,7 +2,7 @@
 include 'component/connection.php';
 include 'function.php';
 session_start();
-$data = getAllData($connect,"tb_kategori");
+$data = getAllData($connect, "tb_kategori");
 
 $title = "kategori";
 ?>
@@ -43,8 +43,8 @@ $title = "kategori";
                         <tr>
                             <td><?= $tampil['kategori']; ?></td>
                             <td>
-                                <a href="input_component/input_kategori.php?edit_kategori=<?= $tampil['id_kategori']?>" class="edit"><i class="fa fa-pen" aria-hidden="true"></i></a>
-                                <a href="#"  onclick="showConfirmationDelete('<?= $tampil['id_kategori'] ?>')" class="delete"><i class="fa fa-trash"></i></a>
+                                <a href="input_component/input_kategori.php?edit_kategori=<?= $tampil['id_kategori'] ?>" class="edit"><i class="fa fa-pen" aria-hidden="true"></i></a>
+                                <a href="#" onclick="showConfirmationDelete('<?= $tampil['id_kategori'] ?>')" class="delete"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -53,18 +53,17 @@ $title = "kategori";
             <!-- table end -->
         </div>
 
-    <div class="pop-up-container" id="popbox">
-        <button class="x_btn" onclick="close_pop()" type="button">
-            <span class="x"></span>
-              <span class="x"></span>
-         </button>
-        <div class="pop-content">
-            <h4>peringatan!!</h4>
-            <p>jika anda ingin menghapus atau mengedit data yang ada disini,maka data pada produk akan berubah anda yakin melanjutkan?</p>
-            <a href="input_component/input_penjualan.php" class=" button mb-3 btn ">lanjutkan</a>
-      
+        <div class="pop-up-container" id="popbox">
+            <button class="x_btn" onclick="close_pop()" type="button">
+                <span class="x"></span>
+                <span class="x"></span>
+            </button>
+            <div class="pop-content">
+                <h4>peringatan!!</h4>
+                <p>jika anda ingin menghapus atau mengedit data yang ada disini,maka data pada produk akan berubah anda yakin melanjutkan?</p>
+                <a href="input_component/input_penjualan.php" class=" button mb-3 btn ">lanjutkan</a>
+            </div>
         </div>
-    </div>
 
 
     </div>
@@ -73,14 +72,14 @@ $title = "kategori";
 
     <!-- table format -->
     <script>
-    $(document).ready(function()
-    {
-        $('#tableformat').DataTable({
-            "columnDefs": [
-        {"className": "dt-center", "targets": "_all"}
-      ]
-        });
-    })
+        $(document).ready(function() {
+            $('#tableformat').DataTable({
+                "columnDefs": [{
+                    "className": "dt-center",
+                    "targets": "_all"
+                }]
+            });
+        })
     </script>
 </body>
 
