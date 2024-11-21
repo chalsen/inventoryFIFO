@@ -126,6 +126,32 @@ function total_laba_kotor($connect)
     $result = mysqli_fetch_assoc($sql);
     return $result['total'];
 }
+function getLaporanByTanggal($connect, $start, $end)
+{
+
+    $query = "SELECT * FROM `tb_rekap_penjualan` WHERE tanggal BETWEEN '$start' AND '$end'";
+
+
+    $sql = mysqli_query($connect, $query);
+    while ($row = mysqli_fetch_assoc($sql)) {
+        $result[] = $row;
+    }
+    return $result;
+}
+
+function getBakufilter($connect, $start, $end, $status)
+{
+    $query = "SELECT * 
+FROM `tb_laporan_baku` 
+WHERE created_at BETWEEN '$start' AND '$end'
+AND status IN ($status);
+";
+    $sql = mysqli_query($connect, $query);
+    while ($row = mysqli_fetch_assoc($sql)) {
+        $result[] = $row;
+    }
+    return $result;
+}
 
 
 function getDataStockIn($connect)

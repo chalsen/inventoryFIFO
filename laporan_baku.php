@@ -2,8 +2,8 @@
 include 'component/connection.php';
 include 'function.php';
 session_start();
-$dataRekap = getAllData($connect, "tb_rekap_penjualan");
-$title = "Rekap data penjualan";
+$dataRekap = getAllData($connect, "tb_laporan_baku");
+$title = "Laporan Bahan Baku";
 
 
 ?>
@@ -35,12 +35,21 @@ $title = "Rekap data penjualan";
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <!-- Tombol Cetak Laporan -->
 
-                    <button class="btn btn-primary mb-0 mr-3" type="submit" name="cetak_laporan_penjualan">
+                    <button class="btn btn-primary mb-0 mr-3" type="submit" name="cetak_laporan_baku">
                         Cetak Laporan <i class="fa fa-print"></i>
                     </button>
 
                     <div class="d-flex">
                         <!-- Start Date -->
+                        <div class="p-2">
+                            <label for="tanggal-mulai" class="form-label m-0">Status</label>
+                            <select name="status" id="filter-status" class="form-control">
+                                <option value="" id="default-status">Semua</option>
+                                <option value="masuk">Masuk</option>
+                                <option value="keluar">Keluar</option>
+                            </select>
+
+                        </div>
                         <div class="p-2">
                             <label for="tanggal-mulai" class="form-label m-0">Start</label>
                             <input type="date" id="tanggal-mulai" name="tanggal-mulai" class="form-control">
@@ -58,36 +67,23 @@ $title = "Rekap data penjualan";
             <table id="tableformat" class="table table-striped table-bordered table-hover w-full">
                 <thead>
                     <tr>
-                        <th scope="col">Produk</th>
-                        <th scope="col">Harga</th>
-                        <th scope="col">Terjual</th>
-                        <th scope="col">Total</th>
+                        <th scope="col">Bahan Baku</th>
+                        <th scope="col">Jumlah</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Tanggal</th>
-                        <th scope="col">Pembeli</th>
-                        <th scope="col">Toko</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- loop start -->
                     <?php foreach ($dataRekap as $tampil): ?>
-                        <tr class="table-row" data-tanggal="<?= $tampil['tanggal']; ?>">
-                            <td><?= $tampil['produk']; ?></td>
-                            <td><?= $tampil['harga']; ?></td>
-                            <td><?= $tampil['terjual']; ?></td>
-                            <td><?= $tampil['harga'] * $tampil['terjual']; ?></td>
-                            <td><?= $tampil['tanggal']; ?></td>
-                            <td><?= $tampil['costumer']; ?></td>
-                            <td><?= $tampil['toko']; ?></td>
+                        <tr class="table-row" data-status="<?= $tampil['status']; ?>" data-tanggal="<?= $tampil['created_at']; ?>">
+                            <td><?= $tampil['nama']; ?></td>
+                            <td><?= $tampil['jumlah']; ?></td>
+                            <td><?= $tampil['status']; ?></td>
+                            <td><?= $tampil['created_at'] ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="3" style="text-align: center;"><strong>Total Penjualan:</strong></td>
-                        <td id="total-penjualan"></td> <!-- Tempat untuk menampilkan total -->
-                        <td colspan="3"></td>
-                    </tr>
-                </tfoot>
             </table>
             <!-- table end -->
         </div>
@@ -105,50 +101,56 @@ $title = "Rekap data penjualan";
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            calculateTotal();
-            $('#tanggal-mulai, #tanggal-berakhir').on('change', function() {
-                // Ambil nilai tanggal mulai dan berakhir
-                var startDate = $('#tanggal-mulai').val();
-                var endDate = $('#tanggal-berakhir').val();
+            resetFilters();
+
+            function resetFilters() {
+                $('#filter-status').val(''); // Mengatur dropdown ke nilai kosong untuk "Semua"
+
+                // Reset tanggal mulai dan tanggal berakhir
+                $('#tanggal-mulai').val(''); // Mengatur tanggal mulai ke kosong
+                $('#tanggal-berakhir').val('');
+
+                filterTable();
+            }
+
+            function filterTable() {
+                var selectedStatus = $('#filter-status').val(); // Ambil status yang dipilih
+                var startDate = $('#tanggal-mulai').val(); // Ambil tanggal mulai
+                var endDate = $('#tanggal-berakhir').val(); // Ambil tanggal berakhir
 
                 // Jika endDate tidak diisi, set ke tanggal yang sangat jauh di masa depan
                 if (!endDate) {
                     endDate = '9999-12-31'; // Tanggal jauh di masa depan
                 }
 
-
-
                 // Loop semua baris tabel
                 $('#tableformat tbody tr').each(function() {
+                    var rowStatus = $(this).data('status'); // Ambil status dari data attribute
                     var rowDate = $(this).data('tanggal'); // Ambil tanggal dari data atribut
 
-                    // Cek jika tanggal dalam rentang yang dipilih
-                    if (rowDate >= startDate && rowDate <= endDate) {
-                        $(this).show(); // Tampilkan baris
+                    // Cek jika status dan tanggal dalam rentang yang dipilih
+                    var statusMatch = (selectedStatus === "" || rowStatus === selectedStatus);
+                    var dateMatch = (rowDate >= startDate && rowDate <= endDate) || !startDate;
+
+                    // Jika kedua kondisi terpenuhi, tampilkan baris, jika tidak sembunyikan
+                    if (statusMatch && dateMatch) {
+                        $(this).show(); // Tampilkan baris jika status dan tanggal cocok
                     } else {
-                        $(this).hide(); // Sembunyikan baris
+                        $(this).hide(); // Sembunyikan baris jika status atau tanggal tidak cocok
                     }
                 });
+            }
 
-                calculateTotal();
+            // Ketika filter status berubah
+            $('#filter-status').change(function() {
+                filterTable(); // Jalankan fungsi filterTable saat status berubah
             });
 
+            // Ketika filter tanggal mulai atau tanggal berakhir berubah
+            $('#tanggal-mulai, #tanggal-berakhir').on('change', function() {
+                filterTable(); // Jalankan fungsi filterTable saat tanggal berubah
+            });
 
-
-            function calculateTotal() {
-                let total = 0;
-
-                // Loop hanya baris yang terlihat
-                $('#tableformat tbody tr:visible').each(function() {
-                    // Ambil nilai kolom 'Total' (kolom ke-4)
-                    var rowTotal = parseFloat($(this).find('td:nth-child(4)').text() || 0);
-
-                    total += rowTotal;
-                });
-
-                // Update total di elemen
-                $('#total-penjualan').text('Rp ' + total.toLocaleString('id-ID'));
-            }
         });
     </script>
 

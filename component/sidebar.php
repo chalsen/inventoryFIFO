@@ -48,8 +48,8 @@
                 </a>
 
                 <ul class="p-0">
-                    <li id="SubMenu_stock_in"><a href="laporan_penjualan.php"><span>Penjualan</span></a></li>
-                    <li id="SubMenu_produk"><a href="produk.php"><span>Bahan Keluar Masuk</span></a></li>
+                    <li id="SubRecord_penjualan"><a href="laporan_penjualan.php"><span>Penjualan</span></a></li>
+                    <li id="SubRecord_baku"><a href="laporan_baku.php"><span>Laoran Bahan Baku</span></a></li>
                 </ul>
             </li>
 

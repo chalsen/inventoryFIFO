@@ -105,6 +105,7 @@ $html .= '
 $mpdf->WriteHTML($html);
 transferData($connect);
 $mpdf->Output();
+unset($_SESSION['pembayaran']);
 
 
 //function tranfer record dari penjualan ke laporan

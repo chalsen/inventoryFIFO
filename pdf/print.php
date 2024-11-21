@@ -24,5 +24,19 @@ if (isset($_POST['print_tagihan'])) {
 
     mysqli_query($connect, $query_update);
     exit;
+} elseif (isset($_POST["cetak_laporan_penjualan"])) {
+    $_SESSION['tanggal-mulai'] = empty($_POST['tanggal-mulai']) ? '0000' : $_POST['tanggal-mulai'];
+    $_SESSION['tanggal-berakhir'] = empty($_POST['tanggal-berakhir']) ? '9999-12-31' : $_POST['tanggal-berakhir'];
+
+    header("Location: print_laporan_pembayaran.php");
+} elseif (isset($_POST["cetak_laporan_baku"])) {
+    $_SESSION['tanggal-mulai'] = empty($_POST['tanggal-mulai']) ? '0000' : $_POST['tanggal-mulai'];
+    $_SESSION['tanggal-berakhir'] = empty($_POST['tanggal-berakhir']) ? '9999-12-31' : $_POST['tanggal-berakhir'];
+    $_SESSION['status'] = empty($_POST['status']) ? "'masuk','keluar'" : "'" . $_POST['status'] . "'";;
+
+
+
+    header("Location: print_laporan_baku.php");
 } else {
+    echo "not found";
 }
