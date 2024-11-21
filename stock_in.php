@@ -2,7 +2,7 @@
 include 'component/connection.php';
 include 'function.php';
 session_start();
-$data = getAllBaku($connect);
+$data = getAllBaku($connect,'tb_baku');
 
 $title = "Stock Masuk";
 ?>
@@ -36,8 +36,9 @@ $title = "Stock Masuk";
 
         <div class="card--container">
             <!-- table start -->
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-start gap-3">
                 <a href="input_component/input_stock_in.php" class="button mb-3 btn"><i class="fas fa-plus-square me-2"></i>Tambah Data</a>
+                <a href="input_component/input_restock_baku.php" class="button mb-3 btn"><i class="fas fa-plus-square me-2"></i>Restock Bahan Baku</a>
                 <?php if ($_SESSION['level'] === 'admin') : ?>
                     <form id="deleteForm" action="logic/delete.php" method="post">
                         <input type="hidden" name="delete_all" value="1">

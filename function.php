@@ -38,6 +38,51 @@ function getAllData($connect, $table)
 
     return $result;
 }
+function cleanInput($data) {
+    if (is_array($data)) {
+        // Rekursif jika elemen dalam array juga merupakan array
+        return array_map('cleanInput', $data);
+    } elseif (is_string($data)) {
+        return stripslashes($data);
+    }
+    return $data;
+}
+
+function getDataBakuByIdProduct($connect, $id) {
+    $query = "
+    SELECT 
+        tb_baku.*, 
+         tb_pivot_baku_produk.stok as stok_pivot,
+        tb_produk.* 
+    FROM 
+        tb_baku
+    JOIN 
+        tb_pivot_baku_produk ON tb_pivot_baku_produk.id_baku = tb_baku.id
+    JOIN 
+        tb_produk ON tb_pivot_baku_produk.id_produk = tb_produk.id_produk
+    WHERE 
+        tb_produk.id_produk = $id
+
+";
+$sql = mysqli_query($connect, $query);
+$result = array();
+
+while ($row = mysqli_fetch_assoc($sql)) {
+    $result[] = $row;
+}
+
+return $result;
+}
+function getNameBaku($connect,$id){
+    $query = "SELECT * FROM tb_baku WHERE id=$id";
+    $sql = mysqli_query($connect, $query);
+    $result = array();
+
+    // Mengambil baris pertama (row)
+    $result = mysqli_fetch_assoc($sql);
+
+    return $result;
+}
 
 function getproductData($connect)
 {

@@ -1,6 +1,9 @@
 <?php
-include '../component/connection.php';
 
+use function PHPSTORM_META\type;
+
+include '../component/connection.php';
+include '../function.php';
 if (isset($_POST['submit'])) {
     //karyawan logic
     if ($_POST['submit'] == 'simpan_karyawan') {
@@ -60,50 +63,99 @@ if (isset($_POST['submit'])) {
         }
 
         mysqli_close($connect);
-    } else if ($_POST['submit'] == 'simpan_produk') {
+    } else if ($_POST['submit'] == 'restock_produk') {
+        $json_baku = [];
+        $produk = mysqli_real_escape_string($connect, $_POST['produk']);
+        $jumlah_produk = mysqli_real_escape_string($connect, $_POST['jumlah_produk']);
+        $cqty = $_POST['cqty'];
+        // var_dump($cqty);
+        // exit;
+        $current_date = date("Y-m-d H:i:s");
+        // 3. Menulis query insert
+        for ($i=0; $i < $jumlah_produk; $i++) { 
+        $code = strval(time()) . $i;
+        $query = "INSERT INTO list_produk (id_produk, created_at,code) VALUES ('$produk', '$current_date', $code)";
+        mysqli_query($connect, $query);
+    }      
+    $query2 = "UPDATE tb_produk SET jumlah = jumlah +'$jumlah_produk' WHERE id_produk = '$produk'";
+    mysqli_query($connect, $query2);
 
+    foreach ($cqty as $key => $value) {
+        // var_dump($value);
+        $query3 = "UPDATE tb_baku SET stok = stok -'$value' WHERE id = '$key'";
+        mysqli_query($connect, $query3);
+        
+    }
+
+    header("location:../produk.php?success");
+    exit();
+          
+    } else if ($_POST['submit'] == 'restock_baku') {
+        $supplier = mysqli_real_escape_string($connect, $_POST['supplier']);
+        $cqty = $_POST['cqty'];
+
+        var_dump($cqty);
+        exit;
+    } else if ($_POST['submit'] == 'simpan_produk') {
+        $json_baku = [];
         $nama_produk = mysqli_real_escape_string($connect, $_POST['nama_produk']);
         $jumlah_produk = mysqli_real_escape_string($connect, $_POST['jumlah_produk']);
         $harga_produk = mysqli_real_escape_string($connect, $_POST['harga_produk']);
         $cqty = $_POST['cqty'];
-
+        // var_dump($cqty);
+        // exit;
         $kategori = mysqli_real_escape_string($connect, $_POST['kategori']);
         $id_baku = $_POST['id_baku']; // Misalnya ini adalah array
         $escaped_ids = array_map(function ($id) use ($connect) {
             return mysqli_real_escape_string($connect, $id);
         }, $id_baku);
-        $cqty = array_map(function ($id) use ($connect) {
-            // var_dump($id);
-            return mysqli_real_escape_string($connect, $id);
-        }, $cqty);
+        foreach ($escaped_ids as $key => $value) {
+            # code...
+            // var_dump($value);
+            // exit;
+            $json_baku[] = [
+                'id'=>intval($value),
+                'value'=>$cqty[intval($value)],
+            ];
+            // $cqty = array_map(function ($id) use ($connect) {
+            //     // var_dump($id);
+            //     return mysqli_real_escape_string($connect, $id);
+            // }, $cqty);
+        }
         // var_dump($cqty);
+        $result_json = json_encode($json_baku);
+        // print_r($result_json);
         // exit;
-        $query = "INSERT INTO `tb_produk`(`nama_produk`, `jumlah`, `id_kategori`, `harga`) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO `tb_produk`(`nama_produk`, `jumlah`, `id_kategori`, `harga`,`baku`) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($connect, $query);
 
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 'sisi', $nama_produk, $jumlah_produk, $kategori, $harga_produk);
+            mysqli_stmt_bind_param($stmt, 'sisis', $nama_produk, $jumlah_produk, $kategori, $harga_produk, $result_json);
             $result = mysqli_stmt_execute($stmt);
 
             if ($result) {
                 $new_id = mysqli_insert_id($connect);
                 foreach ($escaped_ids as $key => $value) {
+                    // Convert $value to integer and store in a variable
+                    $int_value = intval($value);
+                
                     // Check if the value exists in the $cqty array
-                    if (isset($cqty[$value])) {
-                        $cqtys = $cqty[$value]; // Get the quantity for this $value
-
+                    if (isset($cqty[$int_value])) {
+                        $cqtys = $cqty[$int_value]; // Get the quantity for this $value
                         var_dump($key);
+                
                         // Insert into tb_pivot_baku_produk table
-                        $query2 = "INSERT INTO `tb_pivot_baku_produk`(`id_produk`, `id_baku`, `created_at`) VALUES (?, ?, ?)";
+                        $query2 = "INSERT INTO `tb_pivot_baku_produk`(`id_produk`, `id_baku`, `created_at`,`stok`) VALUES (?, ?, ?,?)";
                         $stmt2 = mysqli_prepare($connect, $query2);
-
+                
                         // Update tb_baku stock
-                        $query3 = "UPDATE `tb_baku` SET `stok` = `stok` - $cqtys WHERE `name` = $value";
+                        $query3 = "UPDATE `tb_baku` SET `stok` = `stok` - $cqtys WHERE `name` = $int_value";
                         mysqli_query($connect, $query3);
-
+                        $current_date = date("Y-m-d");
+                        $ctyin = intval($cqty[intval($value)]);
                         if ($stmt2) {
-                            mysqli_stmt_bind_param($stmt2, 'iis', $new_id, $value, date("Y-m-d"));
+                            mysqli_stmt_bind_param($stmt2, 'iisi', $new_id, $int_value,$current_date,$ctyin);
                             $result2 = mysqli_stmt_execute($stmt2);
                         }
                     } else {
@@ -111,8 +163,9 @@ if (isset($_POST['submit'])) {
                         echo "No quantity found for id: $value";
                     }
                 }
+                
 
-                exit;
+                // exit;
                 header("location:../produk.php?success");
                 exit();
             } else {
@@ -311,6 +364,16 @@ if (isset($_POST['submit'])) {
         echo "Gagal mengeksekusi pernyataan SQL: " . mysqli_error($connect);
     }
     mysqli_close($connect);
+}else if($_POST['restock_product']){
+
+
+    $data = getDataBakuByIdProduct($connect,$_POST['id_product']);
+   
+    // $data = json_decode($,true);
+    // $data = cleanInput($data);
+    // print_r($data);
+echo json_encode($data);
+
 } else {
     header("location:../index.php?error");
 }
