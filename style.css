@@ -578,3 +578,12 @@ div.form_pembayaran{
     justify-content: space-between;
     width: 100%;
 }
+
+.button{
+   
+    background-color: rgb(24, 96, 56);
+    color: #fff;
+}
+.button:hover{
+    background-color: rgb(76, 181, 124);
+}
