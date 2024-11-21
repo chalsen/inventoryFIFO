@@ -217,6 +217,12 @@ if ($data_penjualan != null) {
     <script src="script.js"></script>
     <script>
         $(document).ready(function() {
+            if (!localStorage.getItem('refresed')) {
+                localStorage.setItem('refresed', 'yes');
+                location.reload();
+            } else {
+                localStorage.removeItem('refresed');
+            }
             //cek data penjualan apakah ada
             cekDataPenjualan();
             // Inisialisasi selectpicker untuk #selection_product

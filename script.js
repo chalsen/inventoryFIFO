@@ -9,6 +9,8 @@ const SubMenu_StockIn = document.getElementById('SubMenu_stock_in');
 const SubMenu_kategori = document.getElementById('SubMenu_kategori');
 const penjualan = document.querySelector('#li_penjualan');
 const record = document.getElementById('li_record');
+const subRecord_penjualan = document.getElementById('SubRecord_penjualan');
+const subRecord_baku = document.getElementById('SubRecord_baku');
 const popbox = document.getElementById('popbox');
 const btn_edit = document.querySelectorAll('.edit_penjualan');
 const grup_edit = document.querySelectorAll('.grupEdit');
@@ -26,7 +28,9 @@ function updateNavClass(activeTabId) {
     SubMenu_StockIn.classList.toggle('active', activeTabId === 'stock_in');
     SubMenu_kategori.classList.toggle('active', activeTabId === 'kategori');
     penjualan.classList.toggle('active', activeTabId ===  'penjualan');
-    record.classList.toggle('active', activeTabId ===  'record');
+    record.classList.toggle('active', activeTabId ===  'laporan_penjualan'|| activeTabId ===  'laporan_baku');
+    subRecord_penjualan.classList.toggle('active', activeTabId ===  'laporan_penjualan');
+    subRecord_baku.classList.toggle('active', activeTabId ===  'laporan_baku');
     
 }
 function updateKaryawanClass() {
@@ -43,10 +47,12 @@ function updateKaryawanClass() {
         updateNavClass('stock_in');
     } else if (currentPath.includes('kategori.php')) {
         updateNavClass('kategori');
-    } else if (currentPath.includes('penjualan.php')) {
+    }  else if (currentPath.includes('laporan_penjualan.php')) {
+        updateNavClass('laporan_penjualan');
+    }  else if (currentPath.includes('laporan_baku.php')) {
+        updateNavClass('laporan_baku');
+    }else if (currentPath.includes('penjualan.php')) {
         updateNavClass('penjualan');
-    } else if (currentPath.includes('record.php')||currentPath.includes('recordAdmin.php')) {
-        updateNavClass('record');
     }
 }
 
@@ -57,6 +63,17 @@ window.addEventListener('popstate', function (event) {
         updateKaryawanClass();
     }
 });
+
+//login
+ document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordField = document.getElementById('password');
+        const type = passwordField.type === 'password' ? 'text' : 'password';
+        passwordField.type = type;
+
+        // Ubah ikon
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
 
 
 function pop_up(){
@@ -254,6 +271,7 @@ function cekPembayaran(){
     let inputCost = document.querySelector("#inputCost");
     let inputToko  = document.querySelector("#inputToko");
     let inputAlamat = document.querySelector("#inputAlamat");
+    let btnBayar = document.querySelector("#btnPembayaran");
 
     
     
@@ -265,10 +283,11 @@ function cekPembayaran(){
     let valueHarga = parseInt(totalHarga.value.replace(/[^0-9]/g, ""));
 
     if(valueBayar >= valueHarga){
-        location.reload();
         document.getElementById("bayar").submit();
         totalHarga.style.border = "1px solid #ced4da";
         totalBayar.style.border = "1px solid #ced4da";
+        btnBayar.innerHTML = "Processing";
+        btnBayar.disabled= true;
     }else{
         totalHarga.style.border = "1px solid red";
         totalBayar.style.border = "1px solid red";
