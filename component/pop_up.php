@@ -70,6 +70,8 @@
                 <input type="text" name="costumer" value="" id="inputCost" hidden>
                 <input type="text" name="toko" value="" id="inputToko" hidden>
                 <input type="text" name="alamat" value="" id="inputAlamat" hidden>
+                <input type="text" name="id_produk" value="" id="inputAlamat" hidden>
+                <input type="text" name="id_penjual" value="" id="inputAlamat" hidden>
                 <button type="button" onclick="cekPembayaran()" class="btn btn-success mb-3" id="btnPembayaran">Bayar <i class="fa fa-dollar-sign" id="btnBayar"></i></button>
                 <button type="button" onclick="formBayar('close')" class="btn btn-danger">Batal <i class="fa fa-undo"></i></button>
             </div>

@@ -264,6 +264,7 @@ if (isset($_POST['submit'])) {
     }
 } else if (isset($_POST['simpan']) == "penjualan") {
 
+
     $produk = mysqli_real_escape_string($connect, $_POST['produk']);
     $jumlah = mysqli_real_escape_string($connect, $_POST['jumlah']);
 

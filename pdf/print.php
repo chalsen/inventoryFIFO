@@ -2,15 +2,39 @@
 include '../component/connection.php';
 session_start();
 
-var_dump($_POST);
+// var_dump($_POST);
 if (isset($_POST['print_tagihan'])) {
     header("Location: print_tagihan.php");
     exit;
 } elseif (isset($_POST['print_penjualan'])) {
+
+    $query_pembayaran = 'SELECT id_produk,penjualan FROM `tb_penjualan_harian`';
+
+    $sql = mysqli_query($connect, $query_pembayaran);
+    if (!$sql) {
+        die('Query gagal dijalankan: ' . mysqli_error($connect));
+    }
+
+    $data = [];
+    while ($row = mysqli_fetch_assoc($sql)) {
+        $data[] = $row;
+    }
     $cost = $_POST['costumer'];
     $toko = $_POST['toko'];
     $alamat = $_POST['alamat'];
 
+    // penghapusan atau pengeluaran data dari tb list_produk
+    foreach ($data as $d) {
+        $id = $d['id_produk'];
+        $jual = $d['penjualan'];
+
+        $queryFirstOut = "DELETE FROM `list_produk` WHERE `id_produk` = '$id'  ORDER BY created_at ASC LIMIT $jual ";
+
+        $result = mysqli_query($connect, $queryFirstOut);
+        if (!$result) {
+            die('Gagal menghapus produk FIFO: ' . mysqli_error($connect));
+        }
+    }
     $_SESSION['pembayaran'] = $_POST['pembayaran'];
     header("Location: print_pembayaran.php");
 

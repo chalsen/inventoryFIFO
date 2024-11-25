@@ -12,6 +12,7 @@ if (!empty($data_penjualan)) {
     // Tangani situasi ketika tidak ada data penjualan
     $customer_name = "Nama Customer Tidak Ditemukan";
 }
+
 $mpdf = new \Mpdf\Mpdf();
 
 $html = '
