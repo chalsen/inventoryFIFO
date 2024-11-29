@@ -47,7 +47,7 @@ if($pass==$confirm){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styleLogin.css">
-    <title>Login</title>
+    <title>Register</title>
 </head>
 <body>
 
@@ -55,7 +55,7 @@ if($pass==$confirm){
 <div class="center">
          <div class="container">
             <div class="text">
-               Login
+               Register
             </div>
             <form action="registrasi.php" method="POST">
                <div class="data">
@@ -98,7 +98,7 @@ if($pass==$confirm){
                   <button type="submit" name="Sign-in" value="Sign-in">login</button>
                </div>
                <div class="signup-link">
-                  sudah ada akun? <a href="login.php">Daftar disini</a>
+                  sudah ada akun? <a href="login.php">Login disini</a>
                </div>
             </form>
          </div>

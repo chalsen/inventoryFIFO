@@ -4,6 +4,8 @@ use function PHPSTORM_META\type;
 
 include '../component/connection.php';
 include '../function.php';
+// Atur zona waktu ke Asia/Jakarta
+date_default_timezone_set("Asia/Jakarta");
 if (isset($_POST['submit'])) {
     //karyawan logic
     if ($_POST['submit'] == 'simpan_karyawan') {
@@ -77,6 +79,7 @@ if (isset($_POST['submit'])) {
             $query = "INSERT INTO list_produk (id_produk, created_at,code) VALUES ('$produk', '$current_date', $code)";
             mysqli_query($connect, $query);
         }
+      
         $query2 = "UPDATE tb_produk SET jumlah = jumlah +'$jumlah_produk' WHERE id_produk = '$produk'";
         mysqli_query($connect, $query2);
 
@@ -84,6 +87,8 @@ if (isset($_POST['submit'])) {
             // var_dump($value);
             $query3 = "UPDATE tb_baku SET stok = stok -'$value' WHERE id = '$key'";
             mysqli_query($connect, $query3);
+            $query = "INSERT INTO tb_laporan_baku (nama, jumlah, status) VALUES ('$key', '$value', 'keluar')";
+            mysqli_query($connect, $query);
         }
 
         header("location:../produk.php?success");
@@ -100,6 +105,8 @@ if (isset($_POST['submit'])) {
 
             // Perbaiki query dengan tanda kutip untuk string
             $query = "UPDATE `tb_baku` SET `stok` = `stok` + $value WHERE `name` = '$key'";
+            mysqli_query($connect, $query);
+            $query = "INSERT INTO tb_laporan_baku (nama, jumlah, status) VALUES ('$key', '$value', 'masuk')";
             mysqli_query($connect, $query);
         }
 
@@ -375,15 +382,7 @@ if (isset($_POST['submit'])) {
         echo "Gagal mengeksekusi pernyataan SQL: " . mysqli_error($connect);
     }
     mysqli_close($connect);
-} else if ($_POST['restock_product']) {
 
-
-    $data = getDataBakuByIdProduct($connect, $_POST['id_product']);
-
-    // $data = json_decode($,true);
-    // $data = cleanInput($data);
-    // print_r($data);
-    echo json_encode($data);
 } else {
     header("location:../index.php?error");
 }
