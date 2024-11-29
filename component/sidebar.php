@@ -50,7 +50,7 @@
 
                 <ul class="p-0">
                     <li id="SubRecord_penjualan"><a href="laporan_penjualan.php"><span>Penjualan</span></a></li>
-                    <li id="SubRecord_baku"><a href="laporan_baku.php"><span>Laoran Bahan Baku</span></a></li>
+                    <li id="SubRecord_baku"><a href="laporan_baku.php"><span>Laporan Bahan Baku</span></a></li>
                 </ul>
             </li>
 
