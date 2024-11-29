@@ -148,7 +148,7 @@ if (isset($_POST['submit'])) {
         // print_r($result_json);
         // exit;
 
-        $new_id = mysqli_insert_id($connect);
+
         foreach ($escaped_ids as $key => $value) {
             // Convert $value to integer and store in a variable
             $int_value = intval($value);
@@ -181,17 +181,15 @@ if (isset($_POST['submit'])) {
                     if ($stmt) {
                         mysqli_stmt_bind_param($stmt, 'sisis', $nama_produk, $jumlah_produk, $kategori, $harga_produk, $result_json);
                         $result = mysqli_stmt_execute($stmt);
-
                         if ($result) {
-                        } else {
-                            echo "Gagal mengeksekusi pernyataan SQL: " . mysqli_stmt_error($stmt);
-                        }
+                            $new_id = mysqli_insert_id($connect);
+                    
                         // var_dump($key);
                         // var_dump($key);
                         // var_dump("berhasil");
                         // exit;
                         // Insert into tb_pivot_baku_produk table
-                        $query2 = "INSERT INTO `tb_pivot_baku_produk`(`id_produk`, `id_baku`, `created_at`,`stok`) VALUES (?, ?, ?,?)";
+                        $query2 = "INSERT INTO `tb_pivot_baku_produk`(`id_produk`, `id_baku`, `created_at`,`stok`) VALUES (?, ?, ?, ?)";
                         $stmt2 = mysqli_prepare($connect, $query2);
 
                         // Update tb_baku stock
@@ -207,6 +205,9 @@ if (isset($_POST['submit'])) {
                             header("location:../produk.php?success");
                             exit();
                         }
+                    } else {
+                        echo "Gagal mengeksekusi pernyataan SQL: " . mysqli_stmt_error($stmt);
+                    }
                     } else {
                         echo "Gagal membuat pernyataan SQL: " . mysqli_error($connect);
                     }
