@@ -2,7 +2,7 @@
 include 'component/connection.php';
 include 'function.php';
 session_start();
-$data = getAllBaku($connect,'tb_baku');
+$data = getAllBaku($connect, 'tb_baku');
 
 $title = "Stock Masuk";
 ?>
@@ -45,11 +45,7 @@ $title = "Stock Masuk";
                         <button type="button" class="button-danger mb-3 btn" onclick="confirmDeleteAll()"><i class="fas fa-trash me-2"></i> Hapus Semua Data</button>
                     </form>
                 <?php endif; ?>
-                <?php if($_GET['fail']): ?>
-                    <script>
-                        alert("data stok kurang dari kebutuhan stok komposisi produk");
-                    </script>
-                    <?php endif; ?>
+
             </div>
 
 

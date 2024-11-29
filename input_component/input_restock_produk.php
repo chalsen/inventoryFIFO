@@ -46,13 +46,14 @@ if (isset($_GET['edit_produk'])) {
                 <div class="input-box">
                     <label>Nama produk</label>
                     <select name="produk" id="produk">
+                        <option selected value="">pilih produk</option>
                         <?php foreach ($data_produk as $tampil) : ?>
                             <option value="<?php echo $tampil['id_produk']; ?>"><?php echo $tampil['nama_produk']; ?></option>
                         <?php endforeach ?>
                     </select>
                     <!-- <input name="nama_produk" type="text" placeholder="Masukkan nama produk" value="<?= $name ?>" required /> -->
                 </div>
-               
+
                 <?php if (isset($_GET['edit_produk'])): ?>
                     <div class="input-box">
                         <label>Jumlah produk</label>
@@ -102,111 +103,111 @@ if (isset($_GET['edit_produk'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
     <script>
-    $(document).ready(function() {
-        $("#customQTY").empty();
-        $(".select-baku").select2({
-            allowClear: true
-        });
-
-        $("#produk").on('change', function(e) {
-            
-            const id = $(this).val();
-            $('#restock-baku').empty();
+        $(document).ready(function() {
             $("#customQTY").empty();
+            $(".select-baku").select2({
+                allowClear: true
+            });
 
-            $.ajax({
-                url: '../logic/input_logic.php', // Ganti dengan URL PHP Anda
-                type: 'POST',
-                data: {
-                    id_product: id,
-                    restock_product: 'get_data_baku_by_id_product',
-                },
-                success: function(response) {
-                    console.log("Data sent successfully: " + response);
-                    const data = JSON.parse(response);
-                    // Menyiapkan HTML untuk select box
-                    
-                    // Menambahkan option berdasarkan stok dan stok_pivot
-                    $('#qty_produk').on('input', function(e) {
-                        var html = "";
-                        e.preventDefault();
-                        const qty = parseInt($(this).val(), 10); // Ambil dan konversi qty menjadi integer
-                        if (isNaN(qty)) {
-                            return; // Jika qty tidak valid, stop proses
-                        }
-                     // Kosongkan dulu elemen sebelum menambahkan data
-                        
-                        html += `
+            $("#produk").on('change', function(e) {
+
+                const id = $(this).val();
+                $('#restock-baku').empty();
+                $("#customQTY").empty();
+
+                $.ajax({
+                    url: '../logic/input_logic.php', // Ganti dengan URL PHP Anda
+                    type: 'POST',
+                    data: {
+                        id_product: id,
+                        restock_product: 'get_data_baku_by_id_product',
+                    },
+                    success: function(response) {
+                        console.log("Data sent successfully: " + response);
+                        const data = JSON.parse(response);
+                        // Menyiapkan HTML untuk select box
+                        alert();
+                        // Menambahkan option berdasarkan stok dan stok_pivot
+                        $('#qty_produk').on('input', function(e) {
+                            var html = "";
+                            e.preventDefault();
+                            const qty = parseInt($(this).val(), 10); // Ambil dan konversi qty menjadi integer
+                            if (isNaN(qty)) {
+                                return; // Jika qty tidak valid, stop proses
+                            }
+                            // Kosongkan dulu elemen sebelum menambahkan data
+
+                            html += `
                             <select class="select-baku form-select" name="id_baku[]" multiple="multiple">
                         `;
-                        data.forEach(e => {
-                            const stokPivot = parseInt(e['stok_pivot'], 10);
-                            const stok = parseInt(e['stok'], 10);
-                            
-                            // Hitung stok yang dapat diproses
-                            const result = stokPivot * qty;
-                            // alert(stokPivot);
-                            // Cek apakah hasil perhitungan tidak melebihi stok yang tersedia
-                            if (result <= stok) {
-                                html += `
+                            data.forEach(e => {
+                                const stokPivot = parseInt(e['stok_pivot'], 10);
+                                const stok = parseInt(e['stok'], 10);
+
+                                // Hitung stok yang dapat diproses
+                                const result = stokPivot * qty;
+                                // alert(stokPivot);
+                                // Cek apakah hasil perhitungan tidak melebihi stok yang tersedia
+                                if (result <= stok) {
+                                    html += `
                                 
                                     <option class="option-baku" data-stok=${stokPivot} data-qty=${qty} value="${e['id']}">${e['name']} - ${e['stok']}</option>
                                 `;
-                            } else {
-                                html += `
+                                } else {
+                                    html += `
                                     <option class="option-baku" data-stok=${stokPivot} data-qty=${qty} disabled value="${e['id']}">${e['name']} - ${e['stok']}</option>
                                 `;
-                            }
-                        });
+                                }
+                            });
 
-                        html += `
+                            html += `
                         </select>
                         <div id="customQTY"></div>
                     `;
 
-                    $("#customQTY").empty();
-                    $('#restock-baku').empty(); 
-                    $('#restock-baku').append(html);
-                       // Inisialisasi ulang select2 setelah elemen select baru ditambahkan
-                       $(".select-baku").select2({
-                            // allowClear: true
-                        });
+                            $("#customQTY").empty();
+                            $('#restock-baku').empty();
+                            $('#restock-baku').append(html);
+                            // Inisialisasi ulang select2 setelah elemen select baru ditambahkan
+                            $(".select-baku").select2({
+                                // allowClear: true
+                            });
 
-                        // Attach select2 events setelah elemen select2 baru diinisialisasi
-                        $(".select-baku").on("select2:select", function(e) {
-                            const id = e.params.data.id;
-                            const name = e.params.data.text;
-                            const option = $(this).find(`option[value='${id}']`);
-    const stok = option.data('stok');  // Mengambil data-stok
-    const qty = option.data('qty');    // Mengambil data-qty
+                            // Attach select2 events setelah elemen select2 baru diinisialisasi
+                            $(".select-baku").on("select2:select", function(e) {
+                                const id = e.params.data.id;
+                                const name = e.params.data.text;
+                                const option = $(this).find(`option[value='${id}']`);
+                                const stok = option.data('stok'); // Mengambil data-stok
+                                const qty = option.data('qty'); // Mengambil data-qty
 
-                            // alert(stok+" | "+qty);
-                            // Cek jika input untuk ID ini belum ada
-                            if (!$("#input_" + id).length) {
-                                $("#customQTY").append(
-                                    `<div id="input_${id}" class="input-box">
+                                // alert(stok+" | "+qty);
+                                // Cek jika input untuk ID ini belum ada
+                                if (!$("#input_" + id).length) {
+                                    $("#customQTY").append(
+                                        `<div id="input_${id}" class="input-box">
                                         <label>Jumlah ${name}</label>
                                         <input type="hidden" name="cqty[${id}]" value="${qty * stok}" placeholder="Masukkan jumlah untuk ${name}" class="form-control" />
                                     </div>`
-                                );
-                            }
+                                    );
+                                }
+                            });
+
+                            $(".select-baku").on("select2:unselect", function(e) {
+                                const id = e.params.data.id;
+                                // Hapus input yang terkait dengan ID ini
+                                $("#input_" + id).remove();
+                            });
                         });
 
-                        $(".select-baku").on("select2:unselect", function(e) {
-                            const id = e.params.data.id;
-                            // Hapus input yang terkait dengan ID ini
-                            $("#input_" + id).remove();
-                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Error: " + error);
+                    }
                 });
-                     
-                },
-                error: function(xhr, status, error) {
-                    console.log("Error: " + error);
-                }
             });
         });
-    });
-</script>
+    </script>
 
 </body>
 

@@ -43,29 +43,29 @@ $title = "produk";
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
+                    <?php
 
-foreach ($dataProduk as $tampil) : 
-    $data_bakus = json_decode($tampil['baku'],true);
-?>
+                    foreach ($dataProduk as $tampil) :
+                        $data_bakus = json_decode($tampil['baku'], true);
+                    ?>
                         <tr>
                             <td><?= $tampil['nama_produk']; ?></td>
                             <td><?= $tampil['total_stock']; ?></td>
                             <td><?= $tampil['kategori']; ?></td>
                             <td>Rp.<?= $tampil['harga']; ?></td>
                             <td>
-                            <ul>
+                                <ul>
 
-<?php
-if(isset($data_bakus)){
+                                    <?php
+                                    if (isset($data_bakus)) {
 
-    foreach ($data_bakus as $key => $value) {
-        $name_baku = getNameBaku($connect,$value['id']);
-        echo "<li>".$name_baku['name']."=".$value['value']."</li>";
-    }
-}
-    ?>
-</ul>
+                                        foreach ($data_bakus as $key => $value) {
+                                            $name_baku = getNameBaku($connect, $value['id']);
+                                            echo "<li>" . $name_baku['name'] . "=" . $value['value'] . "</li>";
+                                        }
+                                    }
+                                    ?>
+                                </ul>
                             </td>
                             <td>
                                 <a href="#" onclick="showConfirmationEdit('<?= $tampil['id_produk'] ?>')" class="edit"><i class="fa fa-pen" aria-hidden="true"></i></a>
@@ -93,7 +93,11 @@ if(isset($data_bakus)){
         </div>
 
     </div>
-
+    <?php if (isset($_GET['fail'])): ?>
+        <script>
+            alert("data stok kurang dari kebutuhan stok komposisi produk");
+        </script>
+    <?php endif; ?>
     <script src="script.js"></script>
 
     <!-- table format -->
