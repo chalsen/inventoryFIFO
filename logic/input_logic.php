@@ -72,30 +72,40 @@ if (isset($_POST['submit'])) {
         // exit;
         $current_date = date("Y-m-d H:i:s");
         // 3. Menulis query insert
-        for ($i=0; $i < $jumlah_produk; $i++) { 
-        $code = strval(time()) . $i;
-        $query = "INSERT INTO list_produk (id_produk, created_at,code) VALUES ('$produk', '$current_date', $code)";
-        mysqli_query($connect, $query);
-    }      
-    $query2 = "UPDATE tb_produk SET jumlah = jumlah +'$jumlah_produk' WHERE id_produk = '$produk'";
-    mysqli_query($connect, $query2);
+        for ($i = 0; $i < $jumlah_produk; $i++) {
+            $code = strval(time()) . $i;
+            $query = "INSERT INTO list_produk (id_produk, created_at,code) VALUES ('$produk', '$current_date', $code)";
+            mysqli_query($connect, $query);
+        }
+        $query2 = "UPDATE tb_produk SET jumlah = jumlah +'$jumlah_produk' WHERE id_produk = '$produk'";
+        mysqli_query($connect, $query2);
 
-    foreach ($cqty as $key => $value) {
-        // var_dump($value);
-        $query3 = "UPDATE tb_baku SET stok = stok -'$value' WHERE id = '$key'";
-        mysqli_query($connect, $query3);
-        
-    }
+        foreach ($cqty as $key => $value) {
+            // var_dump($value);
+            $query3 = "UPDATE tb_baku SET stok = stok -'$value' WHERE id = '$key'";
+            mysqli_query($connect, $query3);
+        }
 
-    header("location:../produk.php?success");
-    exit();
-          
+        header("location:../produk.php?success");
+        exit();
     } else if ($_POST['submit'] == 'restock_baku') {
+
         $supplier = mysqli_real_escape_string($connect, $_POST['supplier']);
         $cqty = $_POST['cqty'];
 
-        var_dump($cqty);
-        exit;
+        foreach ($cqty as $key => $value) {
+            // Sanitize $key and $value
+            $key = mysqli_real_escape_string($connect, $key);
+            $value = (int)$value; // Pastikan $value adalah integer untuk keamanan
+
+            // Perbaiki query dengan tanda kutip untuk string
+            $query = "UPDATE `tb_baku` SET `stok` = `stok` + $value WHERE `name` = '$key'";
+            mysqli_query($connect, $query);
+        }
+
+        // Redirect setelah update
+        header("location:../bahan_baku.php?success");
+        exit();
     } else if ($_POST['submit'] == 'simpan_produk') {
         $json_baku = [];
         $nama_produk = mysqli_real_escape_string($connect, $_POST['nama_produk']);
@@ -114,8 +124,8 @@ if (isset($_POST['submit'])) {
             // var_dump($value);
             // exit;
             $json_baku[] = [
-                'id'=>intval($value),
-                'value'=>$cqty[intval($value)],
+                'id' => intval($value),
+                'value' => $cqty[intval($value)],
             ];
             // $cqty = array_map(function ($id) use ($connect) {
             //     // var_dump($id);
@@ -139,23 +149,23 @@ if (isset($_POST['submit'])) {
                 foreach ($escaped_ids as $key => $value) {
                     // Convert $value to integer and store in a variable
                     $int_value = intval($value);
-                
+
                     // Check if the value exists in the $cqty array
                     if (isset($cqty[$int_value])) {
                         $cqtys = $cqty[$int_value]; // Get the quantity for this $value
                         var_dump($key);
-                
+
                         // Insert into tb_pivot_baku_produk table
                         $query2 = "INSERT INTO `tb_pivot_baku_produk`(`id_produk`, `id_baku`, `created_at`,`stok`) VALUES (?, ?, ?,?)";
                         $stmt2 = mysqli_prepare($connect, $query2);
-                
+
                         // Update tb_baku stock
                         $query3 = "UPDATE `tb_baku` SET `stok` = `stok` - $cqtys WHERE `name` = $int_value";
                         mysqli_query($connect, $query3);
                         $current_date = date("Y-m-d");
                         $ctyin = intval($cqty[intval($value)]);
                         if ($stmt2) {
-                            mysqli_stmt_bind_param($stmt2, 'iisi', $new_id, $int_value,$current_date,$ctyin);
+                            mysqli_stmt_bind_param($stmt2, 'iisi', $new_id, $int_value, $current_date, $ctyin);
                             $result2 = mysqli_stmt_execute($stmt2);
                         }
                     } else {
@@ -163,7 +173,7 @@ if (isset($_POST['submit'])) {
                         echo "No quantity found for id: $value";
                     }
                 }
-                
+
 
                 // exit;
                 header("location:../produk.php?success");
@@ -365,16 +375,15 @@ if (isset($_POST['submit'])) {
         echo "Gagal mengeksekusi pernyataan SQL: " . mysqli_error($connect);
     }
     mysqli_close($connect);
-}else if($_POST['restock_product']){
+} else if ($_POST['restock_product']) {
 
 
-    $data = getDataBakuByIdProduct($connect,$_POST['id_product']);
-   
+    $data = getDataBakuByIdProduct($connect, $_POST['id_product']);
+
     // $data = json_decode($,true);
     // $data = cleanInput($data);
     // print_r($data);
-echo json_encode($data);
-
+    echo json_encode($data);
 } else {
     header("location:../index.php?error");
 }

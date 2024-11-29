@@ -35,7 +35,7 @@ if (isset($_GET['edit_produk'])) {
 
 <body>
     <section class="container">
-        <header>Input Data Produk</header>
+        <header>Input Restock Baku</header>
         <form action="../logic/input_logic.php" method="POST" class="form">
             <div class="input-box" hidden>
                 <label>Id produk</label>
