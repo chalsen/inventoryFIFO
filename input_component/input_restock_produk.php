@@ -126,7 +126,6 @@ if (isset($_GET['edit_produk'])) {
                         console.log("Data sent successfully: " + response);
                         const data = JSON.parse(response);
                         // Menyiapkan HTML untuk select box
-                        alert();
                         // Menambahkan option berdasarkan stok dan stok_pivot
                         $('#qty_produk').on('input', function(e) {
                             var html = "";
