@@ -130,25 +130,55 @@ if (isset($_POST['submit'])) {
         // Redirect setelah update
         header("location:../stock_in.php?success");
         exit();
-    }else if ($_POST['submit'] == 'simpan_produk') {
-            $json_baku = [];
-            $nama_produk = mysqli_real_escape_string($connect, $_POST['nama_produk']);
-            $jumlah_produk = intval($_POST['jumlah_produk']);
-            $harga_produk = mysqli_real_escape_string($connect, $_POST['harga_produk']);
-            $cqty = $_POST['cqty'];
-            $kategori = mysqli_real_escape_string($connect, $_POST['kategori']);
-            $id_baku = $_POST['id_baku'];
-        
-            // Escape IDs dan buat JSON bahan baku
-            $escaped_ids = array_map(function ($id) use ($connect) {
-                return intval(mysqli_real_escape_string($connect, $id));
-            }, $id_baku);
-        
-            foreach ($escaped_ids as $value) {
-                $json_baku[] = [
-                    'id' => $value,
-                    'value' => intval($cqty[$value]),
-                ];
+    } else if ($_POST['submit'] == 'simpan_produk') {
+        $json_baku = [];
+        $nama_produk = mysqli_real_escape_string($connect, $_POST['nama_produk']);
+        $jumlah_produk = intval($_POST['jumlah_produk']);
+        $harga_produk = mysqli_real_escape_string($connect, $_POST['harga_produk']);
+        $cqty = $_POST['cqty'];
+        $kategori = mysqli_real_escape_string($connect, $_POST['kategori']);
+        $id_baku = $_POST['id_baku'];
+
+        // Escape IDs dan buat JSON bahan baku
+        $escaped_ids = array_map(function ($id) use ($connect) {
+            return intval(mysqli_real_escape_string($connect, $id));
+        }, $id_baku);
+
+        foreach ($escaped_ids as $value) {
+            $json_baku[] = [
+                'id' => $value,
+                'value' => intval($cqty[$value]),
+            ];
+        }
+        $result_json = json_encode($json_baku);
+
+        // Insert produk baru
+        $query = "INSERT INTO `tb_produk`(`nama_produk`, `jumlah`, `id_kategori`, `harga`, `baku`) VALUES (?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($connect, $query);
+        mysqli_stmt_bind_param($stmt, 'sisis', $nama_produk, $jumlah_produk, $kategori, $harga_produk, $result_json);
+        mysqli_stmt_execute($stmt);
+        $new_id = mysqli_insert_id($connect); // Ambil ID produk baru
+        mysqli_stmt_close($stmt);
+
+        // Validasi stok bahan baku
+        $placeholders = implode(',', array_fill(0, count($escaped_ids), '?'));
+        $query5 = "SELECT id, stok FROM `tb_baku` WHERE id IN ($placeholders)";
+        $stmt5 = mysqli_prepare($connect, $query5);
+
+        mysqli_stmt_bind_param($stmt5, str_repeat('i', count($escaped_ids)), ...$escaped_ids);
+        mysqli_stmt_execute($stmt5);
+        $result = mysqli_stmt_get_result($stmt5);
+
+        $stok_valid = true;
+        $stok_map = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $stok_map[$row['id']] = $row['stok'];
+            if (isset($cqty[$row['id']])) {
+                $needed_stok = $cqty[$row['id']] * $jumlah_produk;
+                if ($row['stok'] < $needed_stok) {
+                    $stok_valid = false;
+                    break;
+                }
             }
             $result_json = json_encode($json_baku);
         
@@ -221,8 +251,46 @@ if (isset($_POST['submit'])) {
             header("location:../produk.php?success");
             exit();
         }
-        
-     else if ($_POST['submit'] == 'simpan_stock_in') {
+        mysqli_stmt_close($stmt5);
+
+        if (!$stok_valid) {
+            header("location:../produk.php?fail");
+            exit();
+        }
+
+        // Insert ke `list_produk`
+        $current_date = date("Y-m-d H:i:s");
+        $list_produk_values = [];
+        for ($i = 0; $i < $jumlah_produk; $i++) {
+            $code = strval(time()) . $i;
+            $list_produk_values[] = "($new_id, '$current_date', '$code')";
+        }
+        $query_list = "INSERT INTO list_produk (id_produk, created_at, code) VALUES " . implode(',', $list_produk_values);
+        mysqli_query($connect, $query_list);
+
+        // Update stok bahan baku dan pivot table
+        foreach ($escaped_ids as $value) {
+            $stok_used = intval($cqty[$value] * $jumlah_produk);
+
+            // Update stok bahan baku
+            $query3 = "UPDATE `tb_baku` SET `stok` = `stok` - $stok_used WHERE `id` = ?";
+            $stmt3 = mysqli_prepare($connect, $query3);
+            mysqli_stmt_bind_param($stmt3, 'i', $value);
+            mysqli_stmt_execute($stmt3);
+            mysqli_stmt_close($stmt3);
+
+            // Insert pivot table
+            $query2 = "INSERT INTO `tb_pivot_baku_produk`(`id_produk`, `id_baku`, `created_at`, `stok`) VALUES (?, ?, ?, ?)";
+            $stmt2 = mysqli_prepare($connect, $query2);
+            mysqli_stmt_bind_param($stmt2, 'iisi', $new_id, $value, $current_date, $stok_used);
+            mysqli_stmt_execute($stmt2);
+            mysqli_stmt_close($stmt2);
+        }
+
+        // Redirect sukses
+        header("location:../produk.php?success");
+        exit();
+    } else if ($_POST['submit'] == 'simpan_stock_in') {
         $baku = mysqli_real_escape_string($connect, $_POST['baku']);
         $supplier = mysqli_real_escape_string($connect, $_POST['supplier']);
         $harga = mysqli_real_escape_string($connect, $_POST['harga']);

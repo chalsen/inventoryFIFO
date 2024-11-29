@@ -36,7 +36,7 @@ if (isset($_GET['edit_produk'])) {
 <body>
     <section class="container">
         <header>Input Restock Produk</header>
-        <form action="../logic/input_logic.php" method="POST" class="form">
+        <form action="../logic/input_logic.php" method="POST" id="form" class="form">
             <div class="input-box" hidden>
                 <label>Id produk</label>
                 <input name="id_produk" type="number" placeholder="Masukan id produk" value="<?= $id ?>" />
@@ -109,6 +109,7 @@ if (isset($_GET['edit_produk'])) {
                 allowClear: true
             });
 
+
             $("#produk").on('change', function(e) {
 
                 const id = $(this).val();
@@ -125,9 +126,14 @@ if (isset($_GET['edit_produk'])) {
                     success: function(response) {
                         console.log("Data sent successfully: " + response);
                         const data = JSON.parse(response);
+
+                        let i = 0;
+
                         // Menyiapkan HTML untuk select box
-                        alert(JSON.stringify(data));
+                        // alert(JSON.stringify(data));
                         // Menambahkan option berdasarkan stok dan stok_pivot
+
+
                         $('#qty_produk').on('input', function(e) {
                             var html = "";
                             e.preventDefault();
@@ -180,6 +186,8 @@ if (isset($_GET['edit_produk'])) {
                                 const option = $(this).find(`option[value='${id}']`);
                                 const stok = option.data('stok'); // Mengambil data-stok
                                 const qty = option.data('qty'); // Mengambil data-qty
+                                i = i + 1;
+
 
                                 // alert(stok+" | "+qty);
                                 // Cek jika input untuk ID ini belum ada
@@ -195,9 +203,18 @@ if (isset($_GET['edit_produk'])) {
 
                             $(".select-baku").on("select2:unselect", function(e) {
                                 const id = e.params.data.id;
+                                i = i - 1;
                                 // Hapus input yang terkait dengan ID ini
                                 $("#input_" + id).remove();
                             });
+                        });
+
+                        $("#form").on("submit", function(event) {
+                            if (i === 0) {
+                                event.preventDefault(); // Mencegah pengiriman form jika data kosong
+                                alert("Data tidak valid. Form tidak akan dikirim.");
+                                return; // Hentikan eksekusi lebih lanjut
+                            }
                         });
 
                     },
@@ -206,6 +223,10 @@ if (isset($_GET['edit_produk'])) {
                     }
                 });
             });
+
+
+
+
         });
     </script>
 

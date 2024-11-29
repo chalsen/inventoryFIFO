@@ -68,7 +68,7 @@ $title = "Stock Masuk";
                             <td><?= $tampil['stok']; ?></td>
                             <td><?= $tampil['created_at']; ?></td>
                             <td>
-                                <a href="input_component/input_stock_in.php?edit_stock_in=<?= $tampil['id'] ?>" class="edit"><i class="fa fa-pen" aria-hidden="true"></i></a>
+                                <!-- <a href="input_component/input_stock_in.php?edit_stock_in=<?= $tampil['id'] ?>" class="edit"><i class="fa fa-pen" aria-hidden="true"></i></a> -->
                                 <a onclick="showConfirmationDelete(<?= $tampil['id'] ?>)" class="delete"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>

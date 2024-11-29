@@ -68,7 +68,7 @@ $title = "produk";
                                 </ul>
                             </td>
                             <td>
-                                <a href="#" onclick="showConfirmationEdit('<?= $tampil['id_produk'] ?>')" class="edit"><i class="fa fa-pen" aria-hidden="true"></i></a>
+                                <!-- <a href="#" onclick="showConfirmationEdit('<?= $tampil['id_produk'] ?>')" class="edit"><i class="fa fa-pen" aria-hidden="true"></i></a> -->
                                 <a href="#" onclick="showConfirmationDelete('<?= $tampil['id_produk'] ?>')" class="delete"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>

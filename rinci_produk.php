@@ -30,7 +30,7 @@ $title = "Rinci Produk";
 
         <div class="card--container">
             <!-- table start -->
-            <a href="input_component/input_produk.php" class="button mb-3 btn"><i class="fas fa-plus-square me-2"></i>Tambah Data</a>
+
             <table id="tableformat" class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>

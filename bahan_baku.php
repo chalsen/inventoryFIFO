@@ -44,7 +44,7 @@ $title = "Bahan baku";
                 <tbody>
                     <?php foreach ($data as $tampil) : ?>
                         <tr>
-                            <td><?= $tampil['bahan_baku']; ?></td>
+                            <td><?= $tampil['name']; ?></td>
                             <td><?= $tampil['satuan']; ?></td>
                             <td><?= $tampil['kategori']; ?></td>
                             <td><?= $tampil['deskripsi']; ?></td>
