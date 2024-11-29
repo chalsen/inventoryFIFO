@@ -55,7 +55,7 @@
         <input type="button" id="checkDataCostumer" value="<?= isset($data_penjualan[0]['costumer']) ? 'Data Penjualan Ada' : null; ?>" hidden>
     </div>
     <div class="card-body">
-        <form action="pdf/print.php" method="post" id="bayar">
+        <form action="pdf/print.php" method="post" id="bayar" target="_blank">
             <div class="row mb-3">
                 <p class="m-0">Total Harga</p>
                 <input type="Text" id="totalHarga" value="Rp. <?= $total_harga; ?>" class="form-control" readonly>
