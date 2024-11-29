@@ -261,7 +261,8 @@ function oneclick(){
     this.innerHTML = 'Processing...';
 }
 
-function cekPembayaran(){
+function cekPembayaran(event){
+    event.preventDefault();
     let totalHarga = document.querySelector("#totalHarga"); 
     let totalBayar = document.querySelector("#totalBayar"); 
     let textInfoKurang = document.querySelector("#infoKurang"); 
@@ -273,7 +274,7 @@ function cekPembayaran(){
     let inputAlamat = document.querySelector("#inputAlamat");
     let btnBayar = document.querySelector("#btnPembayaran");
 
-    
+
     
     inputCost.value = costumer.value;
     inputToko.value = toko.value;
@@ -283,12 +284,16 @@ function cekPembayaran(){
     let valueHarga = parseInt(totalHarga.value.replace(/[^0-9]/g, ""));
 
     if(valueBayar >= valueHarga){
-        location.reload();
-        document.getElementById("bayar").submit();
-        totalHarga.style.border = "1px solid #ced4da";
-        totalBayar.style.border = "1px solid #ced4da";
-        btnBayar.innerHTML = "Processing";
-        btnBayar.disabled= true;
+         // Mencegah reload sebelum submit
+         document.getElementById("bayar").submit();
+         totalHarga.style.border = "1px solid #ced4da";
+         totalBayar.style.border = "1px solid #ced4da";
+         btnBayar.innerHTML = "Processing";
+         btnBayar.disabled= true;
+         setTimeout(() => {
+             document.getElementById("deleteForm").submit();
+             window.location.reload();
+         }, 3000); // Berikan waktu untuk proses submit selesai
     }else{
         totalHarga.style.border = "1px solid red";
         totalBayar.style.border = "1px solid red";

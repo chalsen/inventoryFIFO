@@ -83,6 +83,18 @@ function getAllProduct($connect)
 
     return $result;
 }
+function getRinciProd($connect)
+{
+    $query = "SELECT p.*,l.* FROM `list_produk`as l JOIN tb_produk as p ON p.id_produk = l.id_produk ";
+    $sql = mysqli_query($connect, $query);
+    $result = array();
+
+    while ($row = mysqli_fetch_assoc($sql)) {
+        $result[] = $row;
+    }
+
+    return $result;
+}
 
 function getAllBaku($connect)
 {

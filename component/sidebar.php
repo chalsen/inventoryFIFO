@@ -28,7 +28,8 @@
                 </a>
                 <ul class="p-0">
                     <li id="SubMenu_stock_in"><a href="stock_in.php"><span>Bahan Stok</span></a></li>
-                    <li id="SubMenu_produk"><a href="produk.php"><span>list-produk</span></a></li>
+                    <li id="SubMenu_produk"><a href="produk.php"><span>List-produk</span></a></li>
+                    <li id="SubMenu_rinci"><a href="rinci_produk.php"><span>Rinci-Produk</span></a></li>
                     <li id="SubMenu_kategori"><a href="kategori.php"><span>kategori</span></a></li>
                 </ul>
             </li>
