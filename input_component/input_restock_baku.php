@@ -3,7 +3,9 @@ include "../component/connection.php";
 include "../function.php";
 
 $data_kategori = getAllKategori($connect);
+$data_supplier = getAllSupplier($connect);
 $data_baku = getAllBaku($connect);
+$data_produk = getAllProduct($connect);
 $id = "";
 $name = "";
 $jumlah = "";
@@ -34,18 +36,31 @@ if (isset($_GET['edit_produk'])) {
 <body>
     <section class="container">
         <header>Input Data Produk</header>
-        <form action="../logic/<?= isset($_GET['edit_produk']) ? 'edit' : 'input_logic' ?>.php" method="POST" class="form">
+        <form action="../logic/input_logic.php" method="POST" class="form">
             <div class="input-box" hidden>
                 <label>Id produk</label>
                 <input name="id_produk" type="number" placeholder="Masukan id produk" value="<?= $id ?>" />
             </div>
 
             <div class="column">
-                <div class="input-box">
+                <!-- <div class="input-box">
                     <label>Nama produk</label>
+                    <select name="produk">
+                        <?php foreach ($data_produk as $tampil) : ?>
+                            <option value="<?php echo $tampil['id_produk']; ?>"><?php echo $tampil['nama_produk']; ?></option>
+                        <?php endforeach ?>
+                    </select>
                     <input name="nama_produk" type="text" placeholder="Masukkan nama produk" value="<?= $name ?>" required />
+                </div> -->
+                <div class="input-box">
+                    <label>Nama Supplier</label>
+                    <select name="supplier">
+                        <?php foreach ($data_supplier as $tampil) : ?>
+                            <option value="<?php echo $tampil['id_supplier']; ?>"><?php echo $tampil['Nama']; ?></option>
+                        <?php endforeach ?>
+                    </select>
+                    <!-- <input name="nama_produk" type="text" placeholder="Masukkan nama produk" value="<?= $name ?>" required /> -->
                 </div>
-
                 <?php if (isset($_GET['edit_produk'])): ?>
                     <div class="input-box">
                         <label>Jumlah produk</label>
@@ -53,38 +68,46 @@ if (isset($_GET['edit_produk'])) {
                     </div>
                 <?php endif; ?>
 
-                <div class="input-box">
+                <!-- <div class="input-box">
                     <label>Kategori Produk</label>
                     <select name="kategori">
                         <?php foreach ($data_kategori as $tampil) : ?>
                             <option value="<?php echo $tampil['id_kategori']; ?>" <?php echo ($tampil['id_kategori'] == $id_kategori) ? 'selected' : ''; ?>><?php echo $tampil['kategori']; ?></option>
                         <?php endforeach ?>
                     </select>
-                </div>
+                </div> -->
 
-                <div class="input-box">
+                <!-- <div class="input-box">
                     <label>Bahan Baku</label>
                     <select class="select-baku form-select" name="id_baku[]" multiple="multiple">
                         <?php foreach ($data_baku as $baku) : ?>
-                            <option class="option-baku" value="<?= $baku['id'] ?>"><?= $baku['name'] ?></option>
+                            <option class="option-baku" value="<?= $baku['name'] ?>"><?= $baku['name'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div id="customQTY"></div>
+                </div> -->
+            </div>
+
+            <!-- <div class="input-box">
+                <label>Jumlah Produk</label>
+                <input name="jumlah_produk" type="number" placeholder="Masukkan jumlah produk" required />
+            </div> -->
+
+            <div class="input-box">
+                    <label>Bahan Baku</label>
+                    <select class="select-baku form-select" name="id_baku[]" multiple="multiple">
+                        <?php foreach ($data_baku as $baku) : ?>
+                            <option class="option-baku" value="<?= $baku['name'] ?>"><?= $baku['name'] ?></option>
                         <?php endforeach; ?>
                     </select>
                     <div id="customQTY"></div>
                 </div>
-            </div>
-
-            <div class="input-box">
-                <label>Jumlah Produk</label>
-                <input name="jumlah_produk" type="number" placeholder="Masukkan jumlah produk" required />
-            </div>
-
-
-            <div class="input-box">
+            <!-- <div class="input-box">
                 <label>Harga produk</label>
                 <input name="harga_produk" type="number" placeholder="Masukkan harga produk" value="<?= $harga ?>" required />
-            </div>
+            </div> -->
 
-            <button type="submit" name="submit" value="<?= isset($_GET['edit_produk']) ? 'edit_produk' : 'simpan_produk' ?>">Submit</button>
+            <button type="submit" name="submit" value="restock_baku">Submit</button>
         </form>
     </section>
 

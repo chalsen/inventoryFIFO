@@ -3,7 +3,6 @@ include 'component/connection.php';
 include 'function.php';
 session_start();
 $dataProduk = getproductData($connect);
-
 $title = "produk";
 ?>
 
@@ -31,6 +30,7 @@ $title = "produk";
         <div class="card--container">
             <!-- table start -->
             <a href="input_component/input_produk.php" class="button mb-3 btn"><i class="fas fa-plus-square me-2"></i>Tambah Data</a>
+            <a href="input_component/input_restock_produk.php" class="button mb-3 btn"><i class="fas fa-plus-square me-2"></i>Restock Produk</a>
             <table id="tableformat" class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
@@ -38,16 +38,35 @@ $title = "produk";
                         <th scope="col">Stock Barang</th>
                         <th scope="col">Kategori</th>
                         <th scope="col">Harga</th>
+                        <th scope="col">Baku</th>
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($dataProduk as $tampil) : ?>
+                    <?php 
+
+foreach ($dataProduk as $tampil) : 
+    $data_bakus = json_decode($tampil['baku'],true);
+?>
                         <tr>
                             <td><?= $tampil['nama_produk']; ?></td>
                             <td><?= $tampil['total_stock']; ?></td>
                             <td><?= $tampil['kategori']; ?></td>
                             <td>Rp.<?= $tampil['harga']; ?></td>
+                            <td>
+                            <ul>
+
+<?php
+if(isset($data_bakus)){
+
+    foreach ($data_bakus as $key => $value) {
+        $name_baku = getNameBaku($connect,$value['id']);
+        echo "<li>".$name_baku['name']."=".$value['value']."</li>";
+    }
+}
+    ?>
+</ul>
+                            </td>
                             <td>
                                 <a href="#" onclick="showConfirmationEdit('<?= $tampil['id_produk'] ?>')" class="edit"><i class="fa fa-pen" aria-hidden="true"></i></a>
                                 <a href="#" onclick="showConfirmationDelete('<?= $tampil['id_produk'] ?>')" class="delete"><i class="fa fa-trash"></i></a>
