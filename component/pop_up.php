@@ -55,7 +55,7 @@
         <input type="button" id="checkDataCostumer" value="<?= isset($data_penjualan[0]['costumer']) ? 'Data Penjualan Ada' : null; ?>" hidden>
     </div>
     <div class="card-body">
-        <form action="pdf/print.php" method="post" id="bayar">
+        <form action="pdf/print.php" method="post" id="bayar" target="_blank">
             <div class="row mb-3">
                 <p class="m-0">Total Harga</p>
                 <input type="Text" id="totalHarga" value="Rp. <?= $total_harga; ?>" class="form-control" readonly>
@@ -72,7 +72,7 @@
                 <input type="text" name="alamat" value="" id="inputAlamat" hidden>
                 <input type="text" name="id_produk" value="" id="inputAlamat" hidden>
                 <input type="text" name="id_penjual" value="" id="inputAlamat" hidden>
-                <button type="button" onclick="cekPembayaran()" class="btn btn-success mb-3" id="btnPembayaran">Bayar <i class="fa fa-dollar-sign" id="btnBayar"></i></button>
+                <button type="button" onclick="cekPembayaran(event)" class="btn btn-success mb-3" id="btnPembayaran">Bayar <i class="fa fa-dollar-sign" id="btnBayar"></i></button>
                 <button type="button" onclick="formBayar('close')" class="btn btn-danger">Batal <i class="fa fa-undo"></i></button>
             </div>
         </form>

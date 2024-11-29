@@ -216,6 +216,8 @@ if ($data_penjualan != null) {
     <script src="datatables/datatables.js"></script>
     <script src="script.js"></script>
     <script>
+
+
         $(document).ready(function() {
             // if (!localStorage.getItem('refresed')) {
             //     localStorage.setItem('refresed', 'yes');
