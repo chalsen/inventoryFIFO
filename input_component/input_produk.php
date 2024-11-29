@@ -73,10 +73,10 @@ if (isset($_GET['edit_produk'])) {
                 </div>
             </div>
 
-            <div class="input-box">
+            <!-- <div class="input-box">
                 <label>Jumlah Produk</label>
                 <input name="jumlah_produk" type="number" placeholder="Masukkan jumlah produk" required />
-            </div>
+            </div> -->
 
 
             <div class="input-box">
