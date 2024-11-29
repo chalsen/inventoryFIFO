@@ -138,7 +138,7 @@ if (isset($_GET['edit_produk'])) {
                             // Kosongkan dulu elemen sebelum menambahkan data
 
                             html += `
-                            <select class="select-baku form-select" name="id_baku[]" multiple="multiple">
+                            <select class="select-baku form-select" name="id_baku[]" multiple="multiple" required>
                         `;
                             data.forEach(e => {
                                 const stokPivot = parseInt(e['stok_pivot'], 10);
