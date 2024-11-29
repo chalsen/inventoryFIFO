@@ -159,15 +159,28 @@ if (isset($_POST['submit'])) {
 
                     // Check if the value exists in the $cqty array
                     if (isset($cqty[$int_value])) {
-                        $cqtys = $cqty[$int_value]; // Get the quantity for this $value
-                        var_dump($key);
+                        $cqtys = $cqty[$int_value] * $jumlah_produk; // Get the quantity for this $value
+                        $query5 = "SELECT stok FROM `tb_baku` WHERE name = ?";
+                        $stmt5 = mysqli_prepare($connect, $query5);
+                        
+                        // Bind parameter (misalnya, name adalah string)
+                        mysqli_stmt_bind_param($stmt5, "s", $key);
+                        
+                        // Eksekusi query
+                        mysqli_stmt_execute($stmt5);
+                        // Dapatkan jumlah baris
+                        $numRows = mysqli_stmt_num_rows($stmt5);
+
+                        if($numRows > 0){
+
+                        // var_dump($key);
 
                         // Insert into tb_pivot_baku_produk table
                         $query2 = "INSERT INTO `tb_pivot_baku_produk`(`id_produk`, `id_baku`, `created_at`,`stok`) VALUES (?, ?, ?,?)";
                         $stmt2 = mysqli_prepare($connect, $query2);
 
                         // Update tb_baku stock
-                        $query3 = "UPDATE `tb_baku` SET `stok` = `stok` - $cqtys WHERE `name` = $int_value";
+                        $query3 = "UPDATE `tb_baku` SET `stok` = `stok` - $cqtys WHERE `name` = $key";
                         mysqli_query($connect, $query3);
                         $current_date = date("Y-m-d");
                         $ctyin = intval($cqty[intval($value)]);
@@ -175,6 +188,10 @@ if (isset($_POST['submit'])) {
                             mysqli_stmt_bind_param($stmt2, 'iisi', $new_id, $int_value, $current_date, $ctyin);
                             $result2 = mysqli_stmt_execute($stmt2);
                         }
+                    }else{
+                        header("location:../stock_in.php?fail"); 
+                    }
+
                     } else {
                         // If the value is not in the $cqty array, handle as needed
                         echo "No quantity found for id: $value";
