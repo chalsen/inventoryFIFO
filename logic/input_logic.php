@@ -420,6 +420,15 @@ if (isset($_POST['submit'])) {
         echo "Gagal mengeksekusi pernyataan SQL: " . mysqli_error($connect);
     }
     mysqli_close($connect);
+} else if ($_POST['restock_product']) {
+
+
+    $data = getDataBakuByIdProduct($connect, $_POST['id_product']);
+
+    // $data = json_decode($,true);
+    // $data = cleanInput($data);
+    // print_r($data);
+    echo json_encode($data);
 } else {
     header("location:../index.php?error");
 }
