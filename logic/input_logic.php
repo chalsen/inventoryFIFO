@@ -136,6 +136,7 @@ if (isset($_POST['submit'])) {
         $jumlah_produk = mysqli_real_escape_string($connect, $_POST['jumlah_produk']);
         $harga_produk = mysqli_real_escape_string($connect, $_POST['harga_produk']);
         $cqty = $_POST['cqty'];
+       
         // var_dump($cqty);
         // exit;
         $kategori = mysqli_real_escape_string($connect, $_POST['kategori']);
@@ -199,8 +200,13 @@ if (isset($_POST['submit'])) {
                         mysqli_stmt_bind_param($stmt, 'sisis', $nama_produk, $jumlah_produk, $kategori, $harga_produk, $result_json);
                         $result = mysqli_stmt_execute($stmt);
                         if ($result) {
+                            $current_date = date("Y-m-d");
                             $new_id = mysqli_insert_id($connect);
-                    
+                            for ($i = 0; $i < $jumlah_produk; $i++) {
+                                $code = strval(time()) . $i;
+                                $query = "INSERT INTO list_produk (id_produk, created_at,code) VALUES ('$new_id', '$current_date', $code)";
+                                mysqli_query($connect, $query);
+                            }
                         // var_dump($key);
                         // var_dump($key);
                         // var_dump("berhasil");
@@ -212,7 +218,6 @@ if (isset($_POST['submit'])) {
                         // Update tb_baku stock
                         $query3 = "UPDATE `tb_baku` SET `stok` = `stok` - $cqtys WHERE `name` = $key";
                         mysqli_query($connect, $query3);
-                        $current_date = date("Y-m-d");
                         $ctyin = intval($cqty[intval($value)]);
                         if ($stmt2) {
                             mysqli_stmt_bind_param($stmt2, 'iisi', $new_id, $int_value, $current_date, $ctyin);
@@ -269,6 +274,10 @@ if (isset($_POST['submit'])) {
             $result = mysqli_stmt_execute($stmt);
 
             if ($result) {
+
+
+                $query = "INSERT INTO tb_laporan_baku (nama, jumlah, status) VALUES ('$baku', '$jumlah', 'masuk')";
+                mysqli_query($connect, $query);
                 //melakukan simpan jumlah ke table produk
                 // $query = "UPDATE `tb_produk` SET `jumlah` = `jumlah` + $jumlah  WHERE id_produk = $produk";
                 // $sql = mysqli_query($connect, $query);
