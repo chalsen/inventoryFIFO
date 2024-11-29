@@ -283,6 +283,7 @@ function cekPembayaran(){
     let valueHarga = parseInt(totalHarga.value.replace(/[^0-9]/g, ""));
 
     if(valueBayar >= valueHarga){
+        location.reload();
         document.getElementById("bayar").submit();
         totalHarga.style.border = "1px solid #ced4da";
         totalBayar.style.border = "1px solid #ced4da";
