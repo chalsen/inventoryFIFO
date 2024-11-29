@@ -85,9 +85,26 @@ if (isset($_POST['submit'])) {
 
         foreach ($cqty as $key => $value) {
             // var_dump($value);
+
+            $query5 = "SELECT * FROM `tb_baku` WHERE id = ?";
+            $stmt5 = mysqli_prepare($connect, $query5);
+
+            // Bind parameter (misalnya, $key adalah string)
+            mysqli_stmt_bind_param($stmt5, "s", $key);
+
+            // Eksekusi query
+            mysqli_stmt_execute($stmt5);
+
+            // Mendapatkan hasil eksekusi query
+            $result = mysqli_stmt_get_result($stmt5);
+
+            // Mengambil satu baris hasil query
+            $row = mysqli_fetch_assoc($result);
+
+            $name = $row['name'];
             $query3 = "UPDATE tb_baku SET stok = stok -'$value' WHERE id = '$key'";
             mysqli_query($connect, $query3);
-            $query = "INSERT INTO tb_laporan_baku (nama, jumlah, status) VALUES ('$key', '$value', 'keluar')";
+            $query = "INSERT INTO tb_laporan_baku (nama, jumlah, status) VALUES ('$name', '$value', 'keluar')";
             mysqli_query($connect, $query);
         }
 
