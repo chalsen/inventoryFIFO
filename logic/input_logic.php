@@ -136,7 +136,7 @@ if (isset($_POST['submit'])) {
         $jumlah_produk = mysqli_real_escape_string($connect, $_POST['jumlah_produk']);
         $harga_produk = mysqli_real_escape_string($connect, $_POST['harga_produk']);
         $cqty = $_POST['cqty'];
-       
+
         // var_dump($cqty);
         // exit;
         $kategori = mysqli_real_escape_string($connect, $_POST['kategori']);
@@ -165,8 +165,13 @@ if (isset($_POST['submit'])) {
         $result_json = json_encode($json_baku);
         // print_r($result_json);
         // exit;
+        $query = "INSERT INTO `tb_produk`(`nama_produk`, `jumlah`, `id_kategori`, `harga`,`baku`) VALUES (?, ?, ?, ?, ?)";
 
-
+        $stmt = mysqli_prepare($connect, $query);
+   
+            mysqli_stmt_bind_param($stmt, 'sisis', $nama_produk, $jumlah_produk, $kategori, $harga_produk, $result_json);
+          mysqli_stmt_execute($stmt);
+           
         foreach ($escaped_ids as $key => $value) {
             // Convert $value to integer and store in a variable
             $int_value = intval($value);
@@ -192,14 +197,9 @@ if (isset($_POST['submit'])) {
 
                 var_dump($cqtys_total);
                 if ($cqtys_total <= $row['stok']) {
-                    $query = "INSERT INTO `tb_produk`(`nama_produk`, `jumlah`, `id_kategori`, `harga`,`baku`) VALUES (?, ?, ?, ?, ?)";
+                  
 
-                    $stmt = mysqli_prepare($connect, $query);
-
-                    if ($stmt) {
-                        mysqli_stmt_bind_param($stmt, 'sisis', $nama_produk, $jumlah_produk, $kategori, $harga_produk, $result_json);
-                        $result = mysqli_stmt_execute($stmt);
-                        if ($result) {
+                   
                             $current_date = date("Y-m-d");
                             $new_id = mysqli_insert_id($connect);
                             for ($i = 0; $i < $jumlah_produk; $i++) {
@@ -207,32 +207,23 @@ if (isset($_POST['submit'])) {
                                 $query = "INSERT INTO list_produk (id_produk, created_at,code) VALUES ('$new_id', '$current_date', $code)";
                                 mysqli_query($connect, $query);
                             }
-                        // var_dump($key);
-                        // var_dump($key);
-                        // var_dump("berhasil");
-                        // exit;
-                        // Insert into tb_pivot_baku_produk table
-                        $query2 = "INSERT INTO `tb_pivot_baku_produk`(`id_produk`, `id_baku`, `created_at`,`stok`) VALUES (?, ?, ?, ?)";
-                        $stmt2 = mysqli_prepare($connect, $query2);
-
-                        // Update tb_baku stock
-                        $query3 = "UPDATE `tb_baku` SET `stok` = `stok` - $cqtys WHERE `name` = $key";
-                        mysqli_query($connect, $query3);
-                        $ctyin = intval($cqty[intval($value)]);
-                        if ($stmt2) {
-                            mysqli_stmt_bind_param($stmt2, 'iisi', $new_id, $int_value, $current_date, $ctyin);
-                            $result2 = mysqli_stmt_execute($stmt2);
-
+                            // var_dump($key);
+                            // var_dump($key);
+                            // var_dump("berhasil");
                             // exit;
-                            header("location:../produk.php?success");
-                            exit();
-                        }
-                    } else {
-                        echo "Gagal mengeksekusi pernyataan SQL: " . mysqli_stmt_error($stmt);
-                    }
-                    } else {
-                        echo "Gagal membuat pernyataan SQL: " . mysqli_error($connect);
-                    }
+                            // Insert into tb_pivot_baku_produk table
+                            $query2 = "INSERT INTO `tb_pivot_baku_produk`(`id_produk`, `id_baku`, `created_at`,`stok`) VALUES (?, ?, ?, ?)";
+                            $stmt2 = mysqli_prepare($connect, $query2);
+
+                            // Update tb_baku stock
+                            $query3 = "UPDATE `tb_baku` SET `stok` = `stok` - $cqtys WHERE `name` = $key";
+                            mysqli_query($connect, $query3);
+                            $ctyin = intval($cqty[intval($value)]);
+                            if ($stmt2) {
+                                mysqli_stmt_bind_param($stmt2, 'iisi', $new_id, $int_value, $current_date, $ctyin);
+                                $result2 = mysqli_stmt_execute($stmt2);
+                            }
+                       
                 } else {
                     // var_dump($key);
                     // var_dump("gagal");
@@ -242,6 +233,9 @@ if (isset($_POST['submit'])) {
                 }
                 // Tutup statement
                 mysqli_stmt_close($stmt5);
+                // exit;
+                header("location:../produk.php?success");
+                exit();
             } else {
                 // If the value is not in the $cqty array, handle as needed
                 echo "No quantity found for id: $value";
