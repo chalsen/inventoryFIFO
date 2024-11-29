@@ -104,7 +104,7 @@ if (isset($_POST['submit'])) {
         }
 
         // Redirect setelah update
-        header("location:../bahan_baku.php?success");
+        header("location:../stock_in.php?success");
         exit();
     } else if ($_POST['submit'] == 'simpan_produk') {
         $json_baku = [];
