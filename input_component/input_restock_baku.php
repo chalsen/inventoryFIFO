@@ -94,14 +94,14 @@ if (isset($_GET['edit_produk'])) {
             </div> -->
 
             <div class="input-box">
-                    <label>Bahan Baku</label>
-                    <select class="select-baku form-select" name="id_baku[]" multiple="multiple">
-                        <?php foreach ($data_baku as $baku) : ?>
-                            <option class="option-baku" value="<?= $baku['name'] ?>"><?= $baku['name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <div id="customQTY"></div>
-                </div>
+                <label>Bahan Baku</label>
+                <select class="select-baku form-select" name="id_baku[]" multiple="multiple">
+                    <?php foreach ($data_baku as $baku) : ?>
+                        <option class="option-baku" value="<?= $baku['name'] ?>"><?= $baku['name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <div id="customQTY"></div>
+            </div>
             <!-- <div class="input-box">
                 <label>Harga produk</label>
                 <input name="harga_produk" type="number" placeholder="Masukkan harga produk" value="<?= $harga ?>" required />

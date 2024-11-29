@@ -51,13 +51,7 @@ if (isset($_GET['edit_stock_in'])) {
 
       <div class="input-box">
         <label>Bahan baku</label>
-        <div class="search_select_box">
-          <select name="produk" class="w-100" data-live-search="true">
-            <?php foreach ($data_produk as $tampil) : ?>
-              <option value="<?php echo $tampil['id_produk']; ?>" <?php echo ($tampil['id_produk'] == $id_produk) ? 'selected' : ''; ?>><?php echo $tampil['nama_produk']; ?></option>
-            <?php endforeach ?>
-          </select>
-        </div>
+
         <input name="baku" type="text" placeholder="Masukkan Nama Bahan Baku" required />
 
       </div>

@@ -2,8 +2,9 @@
 include 'component/connection.php';
 include 'function.php';
 session_start();
-$data = getAllData($connect, "tb_bahan_baku");
-
+$data = getAllData($connect, "tb_baku");
+var_dump($data);
+die();
 $title = "Bahan baku";
 ?>
 

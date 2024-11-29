@@ -38,7 +38,8 @@ function getAllData($connect, $table)
 
     return $result;
 }
-function cleanInput($data) {
+function cleanInput($data)
+{
     if (is_array($data)) {
         // Rekursif jika elemen dalam array juga merupakan array
         return array_map('cleanInput', $data);
@@ -48,7 +49,8 @@ function cleanInput($data) {
     return $data;
 }
 
-function getDataBakuByIdProduct($connect, $id) {
+function getDataBakuByIdProduct($connect, $id)
+{
     $query = "
     SELECT 
         tb_baku.*, 
@@ -64,16 +66,17 @@ function getDataBakuByIdProduct($connect, $id) {
         tb_produk.id_produk = $id
 
 ";
-$sql = mysqli_query($connect, $query);
-$result = array();
+    $sql = mysqli_query($connect, $query);
+    $result = array();
 
-while ($row = mysqli_fetch_assoc($sql)) {
-    $result[] = $row;
-}
+    while ($row = mysqli_fetch_assoc($sql)) {
+        $result[] = $row;
+    }
 
-return $result;
+    return $result;
 }
-function getNameBaku($connect,$id){
+function getNameBaku($connect, $id)
+{
     $query = "SELECT * FROM tb_baku WHERE id=$id";
     $sql = mysqli_query($connect, $query);
     $result = array();
