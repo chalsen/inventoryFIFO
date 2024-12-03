@@ -51,6 +51,7 @@ $html = '
                     <th scope="col">Bahan Baku</th>
                     <th scope="col">Jumlah</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Harga</th>
                     <th scope="col">Tanggal</th>
                 </tr>
             </thead>
@@ -65,6 +66,7 @@ foreach ($data_laporan as $item) {
        <td>' . htmlspecialchars($item['nama']) . '</td>
        <td>' . htmlspecialchars($item['jumlah']) . '</td>
        <td>' . htmlspecialchars($item['status']) . '</td>
+       <td>' . htmlspecialchars($item['harga']) . '</td>
        <td>' . htmlspecialchars($item['created_at']) . '</td>
        
        </tr>';

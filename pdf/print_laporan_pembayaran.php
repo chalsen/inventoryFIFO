@@ -82,7 +82,29 @@ $html .= '
         </table>
         <hr >
             <h3 style="text-align: right; margin-right:30px ;">Total: Rp ' . number_format($total, 0, ',', '.')  . '</h3>
+   <table style="border-collapse: collapse; width: 30%; border-spacing: 0;margin:0;margin-left:auto;margin-right:15px;padding:0;">
+                <tbody>
 
+                  <tr>
+                    <td style="padding:0;border-spacing: 0;border-collapse:collapse;">
+                      <table style="width: 100%; border-collapse: collapse; border-spacing: 0;margin:0">
+                        <tbody>
+                          <tr style="border: 2px solid black;">
+                            <td style="text-align: center;">Pimpinan</td>
+                          </tr>
+                          <tr style="border: 2px solid black;">
+                            <td style="height: 80px;"></td>
+                          </tr>
+                          <tr>
+                            <td style="text-align: center;">Aikal Prima syafer</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
     </div>
 </body>
 </html>

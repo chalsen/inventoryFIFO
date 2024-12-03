@@ -100,11 +100,11 @@ if (isset($_POST['submit'])) {
 
             // Mengambil satu baris hasil query
             $row = mysqli_fetch_assoc($result);
-
+            $price = ($row['price'] ?? 0) * $value;
             $name = $row['name'];
             $query3 = "UPDATE tb_baku SET stok = stok -'$value' WHERE id = '$key'";
             mysqli_query($connect, $query3);
-            $query = "INSERT INTO tb_laporan_baku (nama, jumlah, status) VALUES ('$name', '$value', 'keluar')";
+            $query = "INSERT INTO tb_laporan_baku (nama, jumlah, price, status) VALUES ('$name', '$value', '$price', 'keluar')";
             mysqli_query($connect, $query);
         }
 
@@ -114,19 +114,32 @@ if (isset($_POST['submit'])) {
 
         $supplier = mysqli_real_escape_string($connect, $_POST['supplier']);
         $cqty = $_POST['cqty'];
-
+        // var_dump($cqty);
+        // exit;
         foreach ($cqty as $key => $value) {
             // Sanitize $key and $value
             $key = mysqli_real_escape_string($connect, $key);
             $value = (int)$value; // Pastikan $value adalah integer untuk keamanan
-
+            $query5 = "SELECT price FROM `tb_baku` WHERE name = ?";
+            $stmt5 = mysqli_prepare($connect, $query5);
+            
+            mysqli_stmt_bind_param($stmt5, 's', $key);
+            mysqli_stmt_execute($stmt5);
+            
+            $result = mysqli_stmt_get_result($stmt5);
+            $row = mysqli_fetch_assoc($result);
+            
+            // Gunakan operator null coalescing untuk mengatur default jika data tidak ditemukan
+            $price = ($row['price'] ?? 0) * $value;
+            
             // Perbaiki query dengan tanda kutip untuk string
             $query = "UPDATE `tb_baku` SET `stok` = `stok` + $value WHERE `name` = '$key'";
             mysqli_query($connect, $query);
-            $query = "INSERT INTO tb_laporan_baku (nama, jumlah, status) VALUES ('$key', '$value', 'masuk')";
+            $query = "INSERT INTO tb_laporan_baku (nama, jumlah, harga, status) VALUES ('$key', '$value', '$price', 'masuk')";
             mysqli_query($connect, $query);
         }
-
+        
+        mysqli_stmt_close($stmt5);
         // Redirect setelah update
         header("location:../stock_in.php?success");
         exit();
@@ -308,8 +321,8 @@ if (isset($_POST['submit'])) {
 
             if ($result) {
 
-
-                $query = "INSERT INTO tb_laporan_baku (nama, jumlah, status) VALUES ('$baku', '$jumlah', 'masuk')";
+                $price = ($harga ?? 0) * $jumlah;
+                $query = "INSERT INTO tb_laporan_baku (nama, jumlah, price, status) VALUES ('$baku', '$jumlah', '$price', 'masuk')";
                 mysqli_query($connect, $query);
                 //melakukan simpan jumlah ke table produk
                 // $query = "UPDATE `tb_produk` SET `jumlah` = `jumlah` + $jumlah  WHERE id_produk = $produk";
